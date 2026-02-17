@@ -3,72 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Converter - Full Column Layout</title>
+    <title>Huawei OLT Converter - Compact Layout</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .input-label { @apply block text-[10px] font-bold mb-1 uppercase text-blue-900 tracking-wider; }
-        .text-box { @apply w-full bg-white border border-blue-200 rounded p-2 font-mono text-[10px] outline-none focus:border-blue-500 text-slate-800 shadow-sm; }
-        /* Area output dibuat kolom sejajar dengan scroll horizontal jika layar sempit */
-        .result-container { @apply w-full bg-blue-50 border border-blue-200 rounded font-mono text-[10px] text-blue-900 h-[450px] overflow-both whitespace-pre p-2 shadow-inner border-dashed; }
+        /* Font diperkecil menjadi 9px agar lebih padat */
+        .text-box { @apply w-full bg-white border border-blue-200 rounded p-1 font-mono text-[9px] outline-none focus:border-blue-500 text-slate-800 shadow-sm; }
+        /* Penambahan border kanan sebagai pembatas antar kolom */
+        .result-container { @apply w-full bg-blue-50 border border-blue-200 rounded font-mono text-[9px] text-blue-900 h-[500px] overflow-both whitespace-pre p-2 shadow-inner border-dashed; }
+        .column-divider { @apply border-r border-blue-300 pr-2; }
     </style>
 </head>
 <body class="bg-sky-100 p-4">
     <div class="max-w-[100%] mx-auto">
-        <h1 class="text-xl font-bold text-blue-900 mb-6 border-b border-blue-200 pb-2 text-center uppercase tracking-widest">Huawei Rehoming Generator</h1>
+        <h1 class="text-lg font-bold text-blue-900 mb-4 border-b border-blue-200 pb-2 text-center uppercase tracking-widest">Huawei Rehoming Generator (Compact)</h1>
 
-        <div class="mb-2"><span class="text-xs font-bold text-blue-800 uppercase">Input Data (Excel Columns)</span></div>
-        <div class="grid grid-cols-7 gap-2 mb-8">
-            <div><label class="input-label">Tcont Profile</label><textarea id="in_tcont" class="text-box h-32"></textarea></div>
-            <div><label class="input-label">Traffic Profile</label><textarea id="in_traffic" class="text-box h-32"></textarea></div>
-            <div><label class="input-label">Service Profile</label><textarea id="in_srv" class="text-box h-32"></textarea></div>
-            <div><label class="input-label">Line Profile</label><textarea id="in_line" class="text-box h-32"></textarea></div>
-            <div><label class="input-label text-indigo-700">Interface GPON</label><textarea id="in_if" class="text-box h-32"></textarea></div>
-            <div><label class="input-label text-indigo-700">Service Port</label><textarea id="in_sp" class="text-box h-32"></textarea></div>
+        <div class="mb-2"><span class="text-[10px] font-bold text-blue-800 uppercase">Input Columns</span></div>
+        <div class="grid grid-cols-7 gap-2 mb-6">
+            <div class="column-divider"><label class="input-label">Tcont Profile</label><textarea id="in_tcont" class="text-box h-24"></textarea></div>
+            <div class="column-divider"><label class="input-label">Traffic Profile</label><textarea id="in_traffic" class="text-box h-24"></textarea></div>
+            <div class="column-divider"><label class="input-label">Service Profile</label><textarea id="in_srv" class="text-box h-24"></textarea></div>
+            <div class="column-divider"><label class="input-label">Line Profile</label><textarea id="in_line" class="text-box h-24"></textarea></div>
+            <div class="column-divider"><label class="input-label text-indigo-700">Interface GPON</label><textarea id="in_if" class="text-box h-24"></textarea></div>
+            <div class="column-divider"><label class="input-label text-indigo-700">Service Port</label><textarea id="in_sp" class="text-box h-24"></textarea></div>
             <div>
                 <label class="input-label text-red-700">New PON (F/S/P)</label>
-                <input id="in_newpon" type="text" class="text-box mb-2" placeholder="0/2/2">
-                <button onclick="processData()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded shadow-md transition-all border border-blue-900 uppercase text-xs">Generate</button>
+                <input id="in_newpon" type="text" class="text-box mb-1" placeholder="0/2/2">
+                <button onclick="processData()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded shadow-md transition-all border border-blue-900 uppercase text-[10px]">Generate</button>
             </div>
         </div>
 
-        <div class="mb-2 border-t border-blue-200 pt-4"><span class="text-xs font-bold text-blue-800 uppercase">Output Results (Converted Columns)</span></div>
-        <div class="grid grid-cols-4 gap-2">
-            <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1 px-1">
-                    <span class="input-label text-blue-800">service_profile_result</span>
-                    <button onclick="copyCol('res_srv')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
+        <div class="mb-2 border-t border-blue-200 pt-4"><span class="text-[10px] font-bold text-blue-800 uppercase">Output Results</span></div>
+        <div class="grid grid-cols-4 gap-0 border-l border-t border-b border-blue-200 bg-white">
+            <div class="flex flex-col border-r border-blue-200 p-2 bg-blue-50/30">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="input-label text-blue-800 text-[9px]">service_profile_result</span>
+                    <button onclick="copyCol('res_srv')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold uppercase">Copy</button>
                 </div>
-                <div id="res_srv" class="result-container"></div>
+                <div id="res_srv" class="result-container border-none h-[550px]"></div>
             </div>
 
-            <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1 px-1">
-                    <span class="input-label text-blue-800">line_profile_result</span>
-                    <button onclick="copyCol('res_line')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
+            <div class="flex flex-col border-r border-blue-200 p-2 bg-blue-50/30">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="input-label text-blue-800 text-[9px]">line_profile_result</span>
+                    <button onclick="copyCol('res_line')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold uppercase">Copy</button>
                 </div>
-                <div id="res_line" class="result-container"></div>
+                <div id="res_line" class="result-container border-none h-[550px]"></div>
             </div>
 
-            <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1 px-1">
-                    <span class="input-label text-blue-800">interface_gpon_result</span>
-                    <button onclick="copyCol('res_if')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
+            <div class="flex flex-col border-r border-blue-200 p-2 bg-blue-50/30">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="input-label text-blue-800 text-[9px]">interface_gpon_result</span>
+                    <button onclick="copyCol('res_if')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold uppercase">Copy</button>
                 </div>
-                <div id="res_if" class="result-container"></div>
+                <div id="res_if" class="result-container border-none h-[550px]"></div>
             </div>
 
-            <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1 px-1">
-                    <span class="input-label text-blue-800">service_port_result</span>
-                    <button onclick="copyCol('res_sp')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
+            <div class="flex flex-col border-r border-blue-200 p-2 bg-blue-50/30">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="input-label text-blue-800 text-[9px]">service_port_result</span>
+                    <button onclick="copyCol('res_sp')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold uppercase">Copy</button>
                 </div>
-                <div id="res_sp" class="result-container"></div>
+                <div id="res_sp" class="result-container border-none h-[550px]"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Logika konversi sesuai dengan file python Anda
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -79,16 +80,17 @@
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
-                if (!newPon.includes('/')) return alert("Isi New PON (Format: F/S/P)!");
+                if (!newPon.includes('/')) return alert("Format PON salah!");
                 const [f, s, p] = newPon.split('/');
                 const newFS = `${f}/${s}`;
 
-                const rawTcont = document.getElementById('in_tcont').value.split('\n');
-                const rawTraffic = document.getElementById('in_traffic').value.split('\n');
-                const rawSrv = document.getElementById('in_srv').value.split('\n');
-                const rawLine = document.getElementById('in_line').value.split('\n');
-                const rawIf = document.getElementById('in_if').value.split('\n');
-                const rawSp = document.getElementById('in_sp').value.split('\n');
+                const getLines = (id) => document.getElementById(id).value.split('\n');
+                const rawTcont = getLines('in_tcont');
+                const rawTraffic = getLines('in_traffic');
+                const rawSrv = getLines('in_srv');
+                const rawLine = getLines('in_line');
+                const rawIf = getLines('in_if');
+                const rawSp = getLines('in_sp');
 
                 let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
                 rawTcont.forEach(l => extractMap(l, dbaMap));
@@ -96,37 +98,24 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                // Eksekusi pemrosesan per baris untuk menjaga integritas kolom
-                document.getElementById('res_srv').textContent = rawSrv.map(t => 
-                    t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : ""
-                ).join('\n');
-
+                document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
-
                 document.getElementById('res_if').textContent = rawIf.map(t => {
                     if(!t.trim()) return "";
-                    let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`);
-                    txt = txt.replace(/\bport\s+\d+\b/g, `port ${p}`);
-                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config) \d+/g, `ont $1 ${p}`);
-                    txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
-                    txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`);
-                    txt = txt.replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
-                    txt = txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
-                    return txt;
+                    let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
+                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config) \d+/g, `ont $1 ${p}`).replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
+                    txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
+                    return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 }).join('\n');
-
                 document.getElementById('res_sp').textContent = rawSp.map(t => {
                     if(!t.trim()) return "";
-                    let txt = t.replace(/service-port\s+\d+/g, 'service-port');
-                    txt = txt.replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
+                    let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
-                    txt = txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`);
-                    txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
-                    return txt;
+                    return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
 
                 alert("Generate Berhasil!");
@@ -135,8 +124,8 @@
 
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
-            if(!text) return alert("Data kosong!");
-            navigator.clipboard.writeText(text).then(() => alert("Kolom dicopy!"));
+            if(!text) return;
+            navigator.clipboard.writeText(text).then(() => alert("Copied!"));
         }
     </script>
 </body>
