@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Converter - Stable</title>
+    <title>Huawei OLT Converter - Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .input-label { @apply block text-[10px] font-bold mb-1 uppercase text-sky-400; }
@@ -13,67 +13,33 @@
 </head>
 <body class="bg-slate-950 p-4">
     <div class="max-w-[98%] mx-auto">
-        <h1 class="text-xl font-bold text-sky-500 mb-4 border-b border-slate-800 pb-2">HUAWEI REHOMING GENERATOR</h1>
+        <h1 class="text-xl font-bold text-sky-500 mb-4 border-b border-slate-800 pb-2">HUAWEI REHOMING GENERATOR (FIXED)</h1>
 
         <div class="grid grid-cols-1 md:grid-cols-7 gap-2 mb-4">
-            <div>
-                <label class="input-label">Tcont Profile</label>
-                <textarea id="in_tcont" class="text-box h-40"></textarea>
-            </div>
-            <div>
-                <label class="input-label">Traffic Profile</label>
-                <textarea id="in_traffic" class="text-box h-40"></textarea>
-            </div>
-            <div>
-                <label class="input-label">Service Profile</label>
-                <textarea id="in_srv" class="text-box h-40"></textarea>
-            </div>
-            <div>
-                <label class="input-label">Line Profile</label>
-                <textarea id="in_line" class="text-box h-40"></textarea>
-            </div>
-            <div>
-                <label class="input-label text-yellow-500">Interface GPON</label>
-                <textarea id="in_if" class="text-box h-40"></textarea>
-            </div>
-            <div>
-                <label class="input-label text-orange-500">Service Port</label>
-                <textarea id="in_sp" class="text-box h-40"></textarea>
-            </div>
+            <div><label class="input-label">Tcont Profile</label><textarea id="in_tcont" class="text-box h-40"></textarea></div>
+            <div><label class="input-label">Traffic Profile</label><textarea id="in_traffic" class="text-box h-40"></textarea></div>
+            <div><label class="input-label">Service Profile</label><textarea id="in_srv" class="text-box h-40"></textarea></div>
+            <div><label class="input-label">Line Profile</label><textarea id="in_line" class="text-box h-40"></textarea></div>
+            <div><label class="input-label text-yellow-500">Interface GPON</label><textarea id="in_if" class="text-box h-40"></textarea></div>
+            <div><label class="input-label text-orange-500">Service Port</label><textarea id="in_sp" class="text-box h-40"></textarea></div>
             <div>
                 <label class="input-label text-pink-500">New PON (F/S/P)</label>
                 <input id="in_newpon" type="text" class="text-box mb-2" placeholder="0/1/9">
-                <button onclick="processData()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded shadow-lg transition-all">GENERATE</button>
+                <button id="btnGen" onclick="processData()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded shadow-lg transition-all">GENERATE</button>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-2 border-t border-slate-800 pt-4">
-            <div>
-                <label class="input-label text-emerald-500">service_profile_result</label>
-                <div id="res_srv" class="result-box"></div>
-                <button onclick="copyCol('res_srv')" class="text-[10px] text-slate-500 mt-1 underline">Copy Column</button>
-            </div>
-            <div>
-                <label class="input-label text-emerald-500">line_profile_result</label>
-                <div id="res_line" class="result-box"></div>
-                <button onclick="copyCol('res_line')" class="text-[10px] text-slate-500 mt-1 underline">Copy Column</button>
-            </div>
-            <div>
-                <label class="input-label text-emerald-500">interface_gpon_result</label>
-                <div id="res_if" class="result-box"></div>
-                <button onclick="copyCol('res_if')" class="text-[10px] text-slate-500 mt-1 underline">Copy Column</button>
-            </div>
-            <div>
-                <label class="input-label text-emerald-500">service_port_result</label>
-                <div id="res_sp" class="result-box"></div>
-                <button onclick="copyCol('res_sp')" class="text-[10px] text-slate-500 mt-1 underline">Copy Column</button>
-            </div>
+            <div><label class="input-label text-emerald-500">service_profile_result</label><div id="res_srv" class="result-box"></div><button onclick="copyCol('res_srv')" class="text-[10px] text-slate-500 mt-1 underline">Copy</button></div>
+            <div><label class="input-label text-emerald-500">line_profile_result</label><div id="res_line" class="result-box"></div><button onclick="copyCol('res_line')" class="text-[10px] text-slate-500 mt-1 underline">Copy</button></div>
+            <div><label class="input-label text-emerald-500">interface_gpon_result</label><div id="res_if" class="result-box"></div><button onclick="copyCol('res_if')" class="text-[10px] text-slate-500 mt-1 underline">Copy</button></div>
+            <div><label class="input-label text-emerald-500">service_port_result</label><div id="res_sp" class="result-box"></div><button onclick="copyCol('res_sp')" class="text-[10px] text-slate-500 mt-1 underline">Copy</button></div>
         </div>
     </div>
 
     <script>
         function extractMap(text, mapObj, isTraffic = false) {
-            if (!text || text.trim() === "") return;
+            if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
             let match;
             while ((match = regex.exec(text)) !== null) {
@@ -82,76 +48,86 @@
         }
 
         function processData() {
-            try {
-                const newPon = document.getElementById('in_newpon').value.trim();
-                if (!newPon || !newPon.includes('/')) {
-                    alert("Masukkan New PON dengan benar (contoh: 0/1/9)");
-                    return;
+            const btn = document.getElementById('btnGen');
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                try {
+                    const newPon = document.getElementById('in_newpon').value.trim();
+                    if (!newPon.includes('/')) throw new Error("Format PON salah!");
+
+                    const [f, s, p] = newPon.split('/');
+                    const newFS = `${f}/${s}`;
+
+                    // Ambil raw text dan bersihkan spasi di akhir baris
+                    const getLines = (id) => document.getElementById(id).value.split('\n').map(l => l.trimEnd());
+                    
+                    const rawTcont = getLines('in_tcont');
+                    const rawTraffic = getLines('in_traffic');
+                    const rawSrv = getLines('in_srv');
+                    const rawLine = getLines('in_line');
+                    const rawIf = getLines('in_if');
+                    const rawSp = getLines('in_sp');
+
+                    let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
+
+                    // Build Maps
+                    rawTcont.forEach(l => extractMap(l, dbaMap));
+                    rawTraffic.forEach(l => extractMap(l, trafficMap, true));
+                    rawSrv.forEach(l => extractMap(l, srvMap));
+                    rawLine.forEach(l => extractMap(l, lineMap));
+
+                    // Helper konversi per baris (Sesuai logika 01_02_03_04_srv_line_int_gpon_serviceport.py)
+                    const resSrv = rawSrv.map(t => t ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "");
+                    
+                    const resLine = rawLine.map(t => {
+                        if(!t) return "";
+                        let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
+                        return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
+                    });
+
+                    const resIf = rawIf.map(t => {
+                        if(!t) return "";
+                        let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`);
+                        txt = txt.replace(/\bport\s+\d+\b/g, `port ${p}`);
+                        txt = txt.replace(/ont (add|ipconfig|tr069-server-config) \d+/g, `ont $1 ${p}`);
+                        txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
+                        txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`);
+                        txt = txt.replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
+                        txt = txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
+                        return txt;
+                    });
+
+                    const resSp = rawSp.map(t => {
+                        if(!t) return "";
+                        let txt = t.replace(/service-port\s+\d+/g, 'service-port');
+                        txt = txt.replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
+                        txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
+                        txt = txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`);
+                        txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
+                        return txt;
+                    });
+
+                    // Output
+                    document.getElementById('res_srv').textContent = resSrv.join('\n');
+                    document.getElementById('res_line').textContent = resLine.join('\n');
+                    document.getElementById('res_if').textContent = resIf.join('\n');
+                    document.getElementById('res_sp').textContent = resSp.join('\n');
+
+                    alert("Konversi Selesai!");
+                } catch (e) {
+                    alert("Error: " + e.message);
+                } finally {
+                    btn.innerText = "GENERATE";
+                    btn.disabled = false;
                 }
-
-                const [f, s, p] = newPon.split('/');
-                const newFS = `${f}/${s}`;
-
-                // Ambil semua baris
-                const rawTcont = document.getElementById('in_tcont').value.split('\n');
-                const rawTraffic = document.getElementById('in_traffic').value.split('\n');
-                const rawSrv = document.getElementById('in_srv').value.split('\n');
-                const rawLine = document.getElementById('in_line').value.split('\n');
-                const rawIf = document.getElementById('in_if').value.split('\n');
-                const rawSp = document.getElementById('in_sp').value.split('\n');
-
-                let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
-
-                // Build Maps
-                rawTcont.forEach(l => extractMap(l, dbaMap));
-                rawTraffic.forEach(l => extractMap(l, trafficMap, true));
-                rawSrv.forEach(l => extractMap(l, srvMap));
-                rawLine.forEach(l => extractMap(l, lineMap));
-
-                // Process Results
-                const resSrv = rawSrv.map(t => t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 '));
-                
-                const resLine = rawLine.map(t => {
-                    let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
-                    return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
-                });
-
-                const resIf = rawIf.map(t => {
-                    let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`);
-                    txt = txt.replace(/\bport\s+\d+\b/g, `port ${p}`);
-                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config) \d+/g, `ont $1 ${p}`);
-                    txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
-                    txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`);
-                    txt = txt.replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
-                    txt = txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
-                    return txt;
-                });
-
-                const resSp = rawSp.map(t => {
-                    let txt = t.replace(/service-port\s+\d+/g, 'service-port');
-                    txt = txt.replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
-                    txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
-                    txt = txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`);
-                    txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
-                    return txt;
-                });
-
-                // Tampilkan Hasil
-                document.getElementById('res_srv').textContent = resSrv.join('\n');
-                document.getElementById('res_line').textContent = resLine.join('\n');
-                document.getElementById('res_if').textContent = resIf.join('\n');
-                document.getElementById('res_sp').textContent = resSp.join('\n');
-
-            } catch (err) {
-                console.error(err);
-                alert("Terjadi kesalahan saat memproses data. Cek format input.");
-            }
+            }, 100);
         }
 
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
-            if(!text) return;
-            navigator.clipboard.writeText(text).then(() => alert("Kolom berhasil disalin!"));
+            navigator.clipboard.writeText(text).then(() => alert("Berhasil disalin!"));
         }
     </script>
 </body>
