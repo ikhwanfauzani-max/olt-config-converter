@@ -3,83 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Converter - Fixed Layout</title>
+    <title>Huawei OLT Converter - Micro Text Mode</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Label di atas kotak, huruf BOLD, ukuran kecil */
-        .input-label { @apply block text-[10px] font-bold mb-1 uppercase text-blue-900 tracking-tighter text-center; }
+        /* Label Judul tetap ukuran 10 Bold */
+        .input-label { @apply block text-[10px] font-bold mb-1 uppercase text-blue-900 tracking-wider text-center; }
         
-        /* Font kotak input/output tetap 8px agar padat */
-        .text-box { @apply w-full bg-white border border-blue-200 rounded p-1 font-mono text-[8px] leading-tight outline-none focus:border-blue-500 text-slate-800 shadow-sm; }
+        /* Teks di dalam kolom diperkecil ke 7px (Micro) */
+        .text-box { @apply w-full bg-white border border-blue-200 rounded p-1 font-mono text-[7px] leading-[1.1] outline-none focus:border-blue-500 text-slate-800 shadow-sm; }
         
-        .result-container { @apply w-full bg-blue-50 border-none font-mono text-[8px] leading-tight text-blue-900 h-[500px] overflow-both whitespace-pre p-1.5 shadow-inner; }
+        /* Teks output juga 7px dengan background biru muda */
+        .result-container { @apply w-full bg-blue-50 border-none font-mono text-[7px] leading-[1.1] text-blue-900 h-[550px] overflow-both whitespace-pre p-1 shadow-inner; }
     </style>
 </head>
-<body class="bg-sky-100 p-4">
+<body class="bg-sky-100 p-3">
     <div class="max-w-[100%] mx-auto">
-        <h1 class="text-sm font-bold text-blue-900 mb-6 border-b border-blue-200 pb-1 text-center uppercase tracking-widest">Huawei Rehoming Generator</h1>
+        <h1 class="text-sm font-bold text-blue-900 mb-5 border-b border-blue-200 pb-1 text-center uppercase tracking-widest">Huawei Rehoming Generator</h1>
 
-        <div class="grid grid-cols-7 gap-2 mb-8">
-            <div class="flex flex-col">
+        <div class="grid grid-cols-7 gap-1 mb-6">
+            <div class="flex flex-col border-r border-blue-200 pr-1">
                 <label class="input-label">Tcont</label>
-                <textarea id="in_tcont" class="text-box h-24"></textarea>
+                <textarea id="in_tcont" class="text-box h-24" placeholder="Paste..."></textarea>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col border-r border-blue-200 pr-1">
                 <label class="input-label">Traffic</label>
-                <textarea id="in_traffic" class="text-box h-24"></textarea>
+                <textarea id="in_traffic" class="text-box h-24" placeholder="Paste..."></textarea>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col border-r border-blue-200 pr-1">
                 <label class="input-label">Srv Prof</label>
-                <textarea id="in_srv" class="text-box h-24"></textarea>
+                <textarea id="in_srv" class="text-box h-24" placeholder="Paste..."></textarea>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col border-r border-blue-200 pr-1">
                 <label class="input-label">Line Prof</label>
-                <textarea id="in_line" class="text-box h-24"></textarea>
+                <textarea id="in_line" class="text-box h-24" placeholder="Paste..."></textarea>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col border-r border-blue-200 pr-1">
                 <label class="input-label text-indigo-700">Interface</label>
-                <textarea id="in_if" class="text-box h-24"></textarea>
+                <textarea id="in_if" class="text-box h-24" placeholder="Paste..."></textarea>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col border-r border-blue-200 pr-1">
                 <label class="input-label text-indigo-700">Srv Port</label>
-                <textarea id="in_sp" class="text-box h-24"></textarea>
+                <textarea id="in_sp" class="text-box h-24" placeholder="Paste..."></textarea>
             </div>
             <div class="flex flex-col">
                 <label class="input-label text-red-700">New PON</label>
                 <input id="in_newpon" type="text" class="text-box mb-1" placeholder="0/2/2">
-                <button onclick="processData()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded shadow-md transition-all border border-blue-900 uppercase text-[9px] mt-auto">Generate</button>
+                <button onclick="processData()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded shadow-md border border-blue-900 uppercase text-[9px] mt-auto">Generate</button>
             </div>
         </div>
 
         <div class="grid grid-cols-4 gap-0 border border-blue-300 rounded overflow-hidden shadow-lg bg-white">
             <div class="flex flex-col border-r border-blue-200">
                 <div class="flex justify-between items-center bg-blue-100 px-2 py-1 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">srv_prof_res</span>
-                    <button onclick="copyCol('res_srv')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-2 py-0.5 rounded text-white font-bold uppercase">Copy</button>
+                    <span class="text-[10px] font-bold text-blue-800">srv_prof_res</span>
+                    <button onclick="copyCol('res_srv')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold">COPY</button>
                 </div>
                 <div id="res_srv" class="result-container"></div>
             </div>
 
             <div class="flex flex-col border-r border-blue-200">
                 <div class="flex justify-between items-center bg-blue-100 px-2 py-1 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">line_prof_res</span>
-                    <button onclick="copyCol('res_line')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-2 py-0.5 rounded text-white font-bold uppercase">Copy</button>
+                    <span class="text-[10px] font-bold text-blue-800">line_prof_res</span>
+                    <button onclick="copyCol('res_line')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold">COPY</button>
                 </div>
                 <div id="res_line" class="result-container"></div>
             </div>
 
             <div class="flex flex-col border-r border-blue-200">
                 <div class="flex justify-between items-center bg-blue-100 px-2 py-1 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">int_gpon_res</span>
-                    <button onclick="copyCol('res_if')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-2 py-0.5 rounded text-white font-bold uppercase">Copy</button>
+                    <span class="text-[10px] font-bold text-blue-800">int_gpon_res</span>
+                    <button onclick="copyCol('res_if')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold">COPY</button>
                 </div>
                 <div id="res_if" class="result-container"></div>
             </div>
 
             <div class="flex flex-col">
                 <div class="flex justify-between items-center bg-blue-100 px-2 py-1 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">srv_port_res</span>
-                    <button onclick="copyCol('res_sp')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-2 py-0.5 rounded text-white font-bold uppercase">Copy</button>
+                    <span class="text-[10px] font-bold text-blue-800">srv_port_res</span>
+                    <button onclick="copyCol('res_sp')" class="bg-blue-600 hover:bg-blue-700 text-[8px] px-1.5 py-0.5 rounded text-white font-bold">COPY</button>
                 </div>
                 <div id="res_sp" class="result-container"></div>
             </div>
@@ -87,6 +88,7 @@
     </div>
 
     <script>
+        // Logika ekstraksi dan konversi tetap mengikuti file python sumber
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -115,6 +117,7 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
+                // Proses pemetaan teks sesuai logic script python
                 document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
@@ -134,14 +137,14 @@
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
                     return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
-                alert("Berhasil!");
+                alert("Berhasil Di-Generate!");
             } catch (e) { alert("Error: " + e.message); }
         }
 
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
-            navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+            navigator.clipboard.writeText(text).then(() => alert("Copied to clipboard!"));
         }
     </script>
 </body>
