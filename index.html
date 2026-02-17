@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huawei OLT Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-200 p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-8 border-b border-slate-700 pb-4">
+            <h1 class="text-3xl font-bold text-sky-400">Huawei Config Converter</h1>
+            <p class="text-slate-400 mt-2">Copy 7 kolom dari Excel: <span class="text-sky-200 font-mono text-sm">tcont, traffic, service, line, interface, service_port, new_pon</span></p>
+        </header>
+
+        <div class="space-y-6">
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-sky-300">1. Paste Data dari Excel</label>
+                <textarea id="rawInput" rows="10" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-4 font-mono text-xs focus:ring-2 focus:ring-sky-500 outline-none" placeholder="Paste data di sini..."></textarea>
+            </div>
+
+            <button onclick="processData()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-lg shadow-lg transform active:scale-95 transition-all">
+                GENERATE KONFIGURASI
+            </button>
+
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-emerald-400">2. Hasil Konversi</label>
+                <textarea id="finalResult" rows="12" class="w-full bg-slate-800 border border-emerald-900/30 rounded-lg p-4 font-mono text-xs text-emerald-400" readonly placeholder="Hasil akan muncul di sini..."></textarea>
+                <button onclick="copyToClipboard()" class="mt-2 text-xs text-slate-500 hover:text-slate-300 underline">Salin ke Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function processData() {
+            const raw = document.getElementById('rawInput').value;
+            const rows = raw.split('\n');
+            let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
+            let finalOutput = [];
+
+            // PHASE 1: Build Mapping
+            rows.forEach(row => {
+                if (!row.trim()) return;
+                const cols = row.split('\t');
+                if (cols.length >= 4) {
+                    extractMap(cols[0], dbaMap);   
+                    extractMap(cols[1], trafficMap, true); 
+                    extractMap(cols[2], srvMap);   
+                    extractMap(cols[3], lineMap);  
+                }
+            });
+
+            // PHASE 2: Conversion
+            rows.forEach(row => {
+                if (!row.trim()) return;
+                const cols = row.split('\t');
+                if (cols.length < 7) return;
+
+                const [tcont, traffic, srv, line, if_gpon, s_port, new_pon] = cols;
+                const cleanNewPon = new_pon.trim();
+                const [f, s, p] = cleanNewPon.split('/');
+                const newFS = `${f}/${s}`;
+
+                let result = `\n! --- CONFIG FOR ${cleanNewPon} ---\n`;
+
+                // Service Profile
+                result += srv.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') + "\n";
+
+                // Line Profile
+                let lineRes = line.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
+                lineRes = lineRes.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
+                result += lineRes + "\n";
+
+                // Interface GPON
+                let ifRes = if_gpon.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`);
+                ifRes = ifRes.replace(/\bport\s+\d+\b/g, `port ${p}`);
+                ifRes = ifRes.replace(/ont (add|ipconfig|tr069-server-config) \d+/g, `ont $1 ${p}`);
+                ifRes = ifRes.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
+                ifRes = ifRes.replace(/\d+\/\d+\/\d+:/g, `${cleanNewPon}:`);
+                ifRes = ifRes.replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
+                ifRes = ifRes.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
+                result += ifRes + "\n";
+
+                // Service Port
+                let spRes = s_port.replace(/service-port\s+\d+/g, 'service-port');
+                spRes = spRes.replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${cleanNewPon}`);
+                spRes = spRes.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
+                spRes = spRes.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${cleanNewPon}`);
+                spRes = spRes.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${cleanNewPon}_`);
+                result += spRes + "\n";
+
+                finalOutput.push(result);
+            });
+
+            document.getElementById('finalResult').value = finalOutput.join('\n');
+        }
+
+        function extractMap(text, mapObj, isTraffic = false) {
+            if (!text) return;
+            const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
+            let match;
+            while ((match = regex.exec(text)) !== null) { mapObj[match[1]] = match[2]; }
+        }
+
+        function copyToClipboard() {
+            const el = document.getElementById('finalResult');
+            el.select();
+            document.execCommand('copy');
+            alert("Teks berhasil disalin!");
+        }
+    </script>
+</body>
+</html>
