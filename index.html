@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Converter - Light Blue Mode</title>
+    <title>Huawei OLT Converter - Full Column Layout</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Tema Biru Muda */
-        .input-label { @apply block text-[11px] font-bold mb-1 uppercase text-blue-900 tracking-wide; }
+        .input-label { @apply block text-[10px] font-bold mb-1 uppercase text-blue-900 tracking-wider; }
         .text-box { @apply w-full bg-white border border-blue-200 rounded p-2 font-mono text-[10px] outline-none focus:border-blue-500 text-slate-800 shadow-sm; }
-        /* Area output menampilkan teks dengan warna kontras */
-        .result-container { @apply w-full bg-blue-50 border border-blue-200 rounded font-mono text-[10px] text-blue-900 h-[400px] overflow-both whitespace-pre p-2 shadow-inner border-dashed; }
+        /* Area output dibuat kolom sejajar dengan scroll horizontal jika layar sempit */
+        .result-container { @apply w-full bg-blue-50 border border-blue-200 rounded font-mono text-[10px] text-blue-900 h-[450px] overflow-both whitespace-pre p-2 shadow-inner border-dashed; }
     </style>
 </head>
 <body class="bg-sky-100 p-4">
     <div class="max-w-[100%] mx-auto">
-        <h1 class="text-xl font-bold text-blue-900 mb-6 border-b border-blue-200 pb-2 text-center uppercase tracking-widest">Huawei Rehoming Generator (Light Blue)</h1>
+        <h1 class="text-xl font-bold text-blue-900 mb-6 border-b border-blue-200 pb-2 text-center uppercase tracking-widest">Huawei Rehoming Generator</h1>
 
-        <div class="grid grid-cols-7 gap-2 mb-6">
-            <div><label class="input-label">Tcont Profile</label><textarea id="in_tcont" class="text-box h-32" placeholder="Paste tcont_profile..."></textarea></div>
-            <div><label class="input-label">Traffic Profile</label><textarea id="in_traffic" class="text-box h-32" placeholder="Paste traffic_profile..."></textarea></div>
-            <div><label class="input-label">Service Profile</label><textarea id="in_srv" class="text-box h-32" placeholder="Paste service_profile..."></textarea></div>
-            <div><label class="input-label">Line Profile</label><textarea id="in_line" class="text-box h-32" placeholder="Paste line_profile..."></textarea></div>
-            <div><label class="input-label text-indigo-700">Interface GPON</label><textarea id="in_if" class="text-box h-32" placeholder="Paste interface_gpon..."></textarea></div>
-            <div><label class="input-label text-indigo-700">Service Port</label><textarea id="in_sp" class="text-box h-32" placeholder="Paste service_port..."></textarea></div>
+        <div class="mb-2"><span class="text-xs font-bold text-blue-800 uppercase">Input Data (Excel Columns)</span></div>
+        <div class="grid grid-cols-7 gap-2 mb-8">
+            <div><label class="input-label">Tcont Profile</label><textarea id="in_tcont" class="text-box h-32"></textarea></div>
+            <div><label class="input-label">Traffic Profile</label><textarea id="in_traffic" class="text-box h-32"></textarea></div>
+            <div><label class="input-label">Service Profile</label><textarea id="in_srv" class="text-box h-32"></textarea></div>
+            <div><label class="input-label">Line Profile</label><textarea id="in_line" class="text-box h-32"></textarea></div>
+            <div><label class="input-label text-indigo-700">Interface GPON</label><textarea id="in_if" class="text-box h-32"></textarea></div>
+            <div><label class="input-label text-indigo-700">Service Port</label><textarea id="in_sp" class="text-box h-32"></textarea></div>
             <div>
                 <label class="input-label text-red-700">New PON (F/S/P)</label>
-                <input id="in_newpon" type="text" class="text-box mb-2" placeholder="Contoh: 0/2/2">
+                <input id="in_newpon" type="text" class="text-box mb-2" placeholder="0/2/2">
                 <button onclick="processData()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded shadow-md transition-all border border-blue-900 uppercase text-xs">Generate</button>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-2 border-t border-blue-200 pt-4">
+        <div class="mb-2 border-t border-blue-200 pt-4"><span class="text-xs font-bold text-blue-800 uppercase">Output Results (Converted Columns)</span></div>
+        <div class="grid grid-cols-4 gap-2">
             <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1">
+                <div class="flex justify-between items-center mb-1 px-1">
                     <span class="input-label text-blue-800">service_profile_result</span>
                     <button onclick="copyCol('res_srv')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
                 </div>
@@ -41,7 +42,7 @@
             </div>
 
             <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1">
+                <div class="flex justify-between items-center mb-1 px-1">
                     <span class="input-label text-blue-800">line_profile_result</span>
                     <button onclick="copyCol('res_line')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
                 </div>
@@ -49,7 +50,7 @@
             </div>
 
             <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1">
+                <div class="flex justify-between items-center mb-1 px-1">
                     <span class="input-label text-blue-800">interface_gpon_result</span>
                     <button onclick="copyCol('res_if')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
                 </div>
@@ -57,7 +58,7 @@
             </div>
 
             <div class="flex flex-col">
-                <div class="flex justify-between items-center mb-1">
+                <div class="flex justify-between items-center mb-1 px-1">
                     <span class="input-label text-blue-800">service_port_result</span>
                     <button onclick="copyCol('res_sp')" class="bg-blue-600 hover:bg-blue-700 text-[9px] px-2 py-1 rounded text-white font-bold shadow-sm uppercase">Copy</button>
                 </div>
@@ -67,7 +68,7 @@
     </div>
 
     <script>
-        // Logika konversi sesuai file .py
+        // Logika konversi sesuai dengan file python Anda
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -95,7 +96,7 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                // Hasil berupa teks di dalam kolom
+                // Eksekusi pemrosesan per baris untuk menjaga integritas kolom
                 document.getElementById('res_srv').textContent = rawSrv.map(t => 
                     t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : ""
                 ).join('\n');
