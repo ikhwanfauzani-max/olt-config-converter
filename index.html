@@ -3,49 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Rehoming - Sharp Grid</title>
+    <title>Huawei OLT Rehoming - Blue Fill Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Menggunakan font mono 6px untuk konsistensi */
+        /* Tetap menggunakan font mono 6px untuk data OLT */
         .column-text { 
-            @apply w-full font-mono text-[6px] leading-[1.1] outline-none text-slate-800 p-2 transition-all;
+            @apply w-full font-mono text-[6px] leading-[1.1] outline-none p-2 transition-all;
         }
         
-        /* Label Judul ukuran 10px Bold */
+        /* Label Judul: Biru Tua, Bold, 10px */
         .column-label { 
-            @apply block text-[10px] font-bold mb-1 uppercase text-slate-700 tracking-wider text-center; 
+            @apply block text-[10px] font-bold mb-1 uppercase text-[#1e3a8a] tracking-wider text-center; 
         }
 
-        /* Garis border dipertegas (Sharp) */
+        /* Border Sharp Slate-500 */
         .border-sharp { 
             @apply border-2 border-slate-500 focus:border-blue-600 rounded-none shadow-sm; 
         }
 
-        /* Box container */
-        .input-box { @apply flex flex-col; }
-        .output-card { @apply bg-white border-2 border-slate-500 flex flex-col min-h-[500px]; }
+        /* Fill warna biru sangat muda untuk area input agar lebih soft */
+        .input-fill { @apply bg-[#f0f7ff] text-slate-900; }
+
+        /* Card Output */
+        .output-card { @apply bg-white border-2 border-slate-500 flex flex-col min-h-[500px] shadow-md; }
 
         .result-area { 
-            @apply flex-grow overflow-both whitespace-pre bg-slate-50 font-mono text-[6px] text-slate-800 p-2;
+            @apply flex-grow overflow-both whitespace-pre bg-white font-mono text-[6px] text-slate-800 p-2;
         }
     </style>
 </head>
 <body class="bg-[#f2f6f8] p-6">
     <div class="max-w-[100%] mx-auto">
-        <h1 class="text-sm font-bold text-slate-800 mb-6 border-b-2 border-slate-500 pb-2 uppercase tracking-widest text-center">Huawei Rehoming Generator</h1>
+        <h1 class="text-sm font-bold text-[#1e3a8a] mb-6 border-b-2 border-slate-500 pb-2 uppercase tracking-widest text-center">Huawei Rehoming Generator</h1>
 
         <div class="grid grid-cols-7 gap-3 mb-10">
-            <div class="input-box"><label class="column-label">dba_profile</label><textarea id="in_tcont" class="column-text border-sharp h-40 bg-white"></textarea></div>
-            <div class="input-box"><label class="column-label">traffic_profile</label><textarea id="in_traffic" class="column-text border-sharp h-40 bg-white"></textarea></div>
-            <div class="input-box"><label class="column-label">service_profile</label><textarea id="in_srv" class="column-text border-sharp h-40 bg-white"></textarea></div>
-            <div class="input-box"><label class="column-label">line_profile</label><textarea id="in_line" class="column-text border-sharp h-40 bg-white"></textarea></div>
-            <div class="input-box"><label class="column-label text-blue-800">interface_gpon</label><textarea id="in_if" class="column-text border-sharp h-40 bg-white"></textarea></div>
-            <div class="input-box"><label class="column-label text-blue-800">service_port</label><textarea id="in_sp" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            <div class="flex flex-col"><label class="column-label">dba_profile</label><textarea id="in_tcont" class="column-text border-sharp input-fill h-40"></textarea></div>
+            <div class="flex flex-col"><label class="column-label">traffic_profile</label><textarea id="in_traffic" class="column-text border-sharp input-fill h-40"></textarea></div>
+            <div class="flex flex-col"><label class="column-label">service_profile</label><textarea id="in_srv" class="column-text border-sharp input-fill h-40"></textarea></div>
+            <div class="flex flex-col"><label class="column-label">line_profile</label><textarea id="in_line" class="column-text border-sharp input-fill h-40"></textarea></div>
+            <div class="flex flex-col"><label class="column-label">interface_gpon</label><textarea id="in_if" class="column-text border-sharp input-fill h-40"></textarea></div>
+            <div class="flex flex-col"><label class="column-label">service_port</label><textarea id="in_sp" class="column-text border-sharp input-fill h-40"></textarea></div>
             
-            <div class="flex flex-col justify-end pb-0">
+            <div class="flex flex-col justify-end">
                 <label class="column-label text-rose-700">New PON (F/S/P)</label>
-                <input id="in_newpon" type="text" class="column-text border-sharp mb-2 bg-white font-bold text-center" placeholder="0/2/2">
-                <button onclick="processData()" class="w-full bg-slate-800 hover:bg-blue-700 text-white font-bold py-3 shadow-lg transition-all uppercase text-[10px] border-2 border-slate-900">Generate</button>
+                <input id="in_newpon" type="text" class="column-text border-sharp input-fill mb-2 font-bold text-center" placeholder="0/2/2">
+                <button onclick="processData()" class="w-full bg-[#1e3a8a] hover:bg-blue-700 text-white font-bold py-3 shadow-lg transition-all uppercase text-[10px] border-2 border-slate-900">Generate</button>
             </div>
         </div>
 
@@ -85,7 +87,7 @@
     </div>
 
     <script>
-        /* Fungsi Logika Konversi */
+        /* Logika inti pemetaan dari script python */
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -114,16 +116,12 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                document.getElementById('res_srv').textContent = rawSrv.map(t => 
-                    t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : ""
-                ).join('\n');
-
+                document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
-
                 document.getElementById('res_if').textContent = rawIf.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
@@ -131,7 +129,6 @@
                     txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 }).join('\n');
-
                 document.getElementById('res_sp').textContent = rawSp.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
