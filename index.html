@@ -3,109 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Converter - Soft Elegant</title>
+    <title>Huawei OLT Rehoming - Sharp Grid</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Menggunakan font mono yang sama untuk semua kolom */
+        /* Menggunakan font mono 6px untuk konsistensi */
         .column-text { 
-            @apply w-full font-mono text-[6px] leading-[1] outline-none text-slate-800 p-1.5 transition-all;
+            @apply w-full font-mono text-[6px] leading-[1.1] outline-none text-slate-800 p-2 transition-all;
         }
         
-        /* Label Kolom: Ukuran 10px, Bold, Warna Soft */
+        /* Label Judul ukuran 10px Bold */
         .column-label { 
-            @apply block text-[10px] font-bold mb-1 uppercase text-slate-600 tracking-wider text-center; 
+            @apply block text-[10px] font-bold mb-1 uppercase text-slate-700 tracking-wider text-center; 
         }
 
-        /* Border yang dipertegas untuk Input dan Output */
-        .border-strong { 
-            @apply border-2 border-slate-300 focus:border-blue-400 rounded-md shadow-sm; 
+        /* Garis border dipertegas (Sharp) */
+        .border-sharp { 
+            @apply border-2 border-slate-500 focus:border-blue-600 rounded-none shadow-sm; 
         }
 
-        /* Container Output */
-        .output-box { 
-            @apply bg-white border-2 border-slate-300 rounded-md overflow-hidden flex flex-col; 
-        }
+        /* Box container */
+        .input-box { @apply flex flex-col; }
+        .output-card { @apply bg-white border-2 border-slate-500 flex flex-col min-h-[500px]; }
 
         .result-area { 
-            @apply w-full h-[550px] overflow-both whitespace-pre bg-slate-50/50; 
+            @apply flex-grow overflow-both whitespace-pre bg-slate-50 font-mono text-[6px] text-slate-800 p-2;
         }
     </style>
 </head>
-<body class="bg-[#f0f4f8] p-4">
+<body class="bg-[#f2f6f8] p-6">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-between items-center mb-6 border-b-2 border-slate-300 pb-2">
-            <h1 class="text-sm font-bold text-slate-700 uppercase tracking-widest">Huawei Rehoming Generator</h1>
-            <span class="text-[9px] text-slate-500 font-medium">Versi Soft Elegant • Nano Text 6px</span>
-        </div>
+        <h1 class="text-sm font-bold text-slate-800 mb-6 border-b-2 border-slate-500 pb-2 uppercase tracking-widest text-center">Huawei Rehoming Generator</h1>
 
-        <div class="grid grid-cols-7 gap-3 mb-8">
-            <div class="flex flex-col">
-                <label class="column-label">Tcont</label>
-                <textarea id="in_tcont" class="column-text border-strong h-24 bg-white"></textarea>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">Traffic</label>
-                <textarea id="in_traffic" class="column-text border-strong h-24 bg-white"></textarea>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">Srv Prof</label>
-                <textarea id="in_srv" class="column-text border-strong h-24 bg-white"></textarea>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">Line Prof</label>
-                <textarea id="in_line" class="column-text border-strong h-24 bg-white"></textarea>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label text-blue-600">Interface</label>
-                <textarea id="in_if" class="column-text border-strong h-24 bg-white"></textarea>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label text-blue-600">Srv Port</label>
-                <textarea id="in_sp" class="column-text border-strong h-24 bg-white"></textarea>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label text-rose-600">New PON</label>
-                <input id="in_newpon" type="text" class="column-text border-strong mb-2 bg-white" placeholder="0/2/2">
-                <button onclick="processData()" class="w-full bg-slate-700 hover:bg-blue-600 text-white font-bold py-2 rounded shadow transition-all uppercase text-[9px] mt-auto">Generate</button>
+        <div class="grid grid-cols-7 gap-3 mb-10">
+            <div class="input-box"><label class="column-label">dba_profile</label><textarea id="in_tcont" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            <div class="input-box"><label class="column-label">traffic_profile</label><textarea id="in_traffic" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            <div class="input-box"><label class="column-label">service_profile</label><textarea id="in_srv" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            <div class="input-box"><label class="column-label">line_profile</label><textarea id="in_line" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            <div class="input-box"><label class="column-label text-blue-800">interface_gpon</label><textarea id="in_if" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            <div class="input-box"><label class="column-label text-blue-800">service_port</label><textarea id="in_sp" class="column-text border-sharp h-40 bg-white"></textarea></div>
+            
+            <div class="flex flex-col justify-end pb-0">
+                <label class="column-label text-rose-700">New PON (F/S/P)</label>
+                <input id="in_newpon" type="text" class="column-text border-sharp mb-2 bg-white font-bold text-center" placeholder="0/2/2">
+                <button onclick="processData()" class="w-full bg-slate-800 hover:bg-blue-700 text-white font-bold py-3 shadow-lg transition-all uppercase text-[10px] border-2 border-slate-900">Generate</button>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-3">
-            <div class="output-box">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
-                    <span class="column-label mb-0 text-slate-700">srv_prof_res</span>
-                    <button onclick="copyCol('res_srv')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
+        <div class="grid grid-cols-4 gap-4">
+            <div class="output-card">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
+                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_service_profile</span>
+                    <button onclick="copyCol('res_srv')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_srv" class="result-area column-text p-2 text-slate-800"></div>
+                <div id="res_srv" class="result-area"></div>
             </div>
 
-            <div class="output-box">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
-                    <span class="column-label mb-0 text-slate-700">line_prof_res</span>
-                    <button onclick="copyCol('res_line')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
+            <div class="output-card">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
+                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_line_profile</span>
+                    <button onclick="copyCol('res_line')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_line" class="result-area column-text p-2 text-slate-800"></div>
+                <div id="res_line" class="result-area"></div>
             </div>
 
-            <div class="output-box">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
-                    <span class="column-label mb-0 text-slate-700">int_gpon_res</span>
-                    <button onclick="copyCol('res_if')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
+            <div class="output-card">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
+                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_interface_gpon</span>
+                    <button onclick="copyCol('res_if')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_if" class="result-area column-text p-2 text-slate-800"></div>
+                <div id="res_if" class="result-area"></div>
             </div>
 
-            <div class="output-box">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
-                    <span class="column-label mb-0 text-slate-700">srv_port_res</span>
-                    <button onclick="copyCol('res_sp')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
+            <div class="output-card">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
+                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_service_port</span>
+                    <button onclick="copyCol('res_sp')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_sp" class="result-area column-text p-2 text-slate-800"></div>
+                <div id="res_sp" class="result-area"></div>
             </div>
         </div>
     </div>
 
     <script>
+        /* Fungsi Logika Konversi */
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -134,12 +114,16 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
+                document.getElementById('res_srv').textContent = rawSrv.map(t => 
+                    t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : ""
+                ).join('\n');
+
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
+
                 document.getElementById('res_if').textContent = rawIf.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
@@ -147,6 +131,7 @@
                     txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 }).join('\n');
+
                 document.getElementById('res_sp').textContent = rawSp.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
