@@ -3,92 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Converter - Nano Text Mode</title>
+    <title>Huawei OLT Converter - Soft Elegant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Judul Label tetap 10px Bold agar navigasi mudah */
-        .input-label { @apply block text-[10px] font-bold mb-0.5 uppercase text-blue-900 tracking-wider text-center; }
+        /* Menggunakan font mono yang sama untuk semua kolom */
+        .column-text { 
+            @apply w-full font-mono text-[6px] leading-[1] outline-none text-slate-800 p-1.5 transition-all;
+        }
         
-        /* Teks di dalam kotak dikecilkan ke 6px (Nano) */
-        .text-box { @apply w-full bg-white border border-blue-200 rounded p-1 font-mono text-[6px] leading-[1] outline-none focus:border-blue-500 text-slate-800 shadow-sm; }
-        
-        /* Area output dengan ukuran 6px dan scroll yang halus */
-        .result-container { @apply w-full bg-blue-50 border-none font-mono text-[6px] leading-[1] text-blue-900 h-[580px] overflow-both whitespace-pre p-1 shadow-inner; }
+        /* Label Kolom: Ukuran 10px, Bold, Warna Soft */
+        .column-label { 
+            @apply block text-[10px] font-bold mb-1 uppercase text-slate-600 tracking-wider text-center; 
+        }
+
+        /* Border yang dipertegas untuk Input dan Output */
+        .border-strong { 
+            @apply border-2 border-slate-300 focus:border-blue-400 rounded-md shadow-sm; 
+        }
+
+        /* Container Output */
+        .output-box { 
+            @apply bg-white border-2 border-slate-300 rounded-md overflow-hidden flex flex-col; 
+        }
+
+        .result-area { 
+            @apply w-full h-[550px] overflow-both whitespace-pre bg-slate-50/50; 
+        }
     </style>
 </head>
-<body class="bg-sky-100 p-2">
+<body class="bg-[#f0f4f8] p-4">
     <div class="max-w-[100%] mx-auto">
-        <h1 class="text-xs font-bold text-blue-900 mb-4 border-b border-blue-200 pb-1 text-center uppercase tracking-widest">Huawei Rehoming Generator (Nano Mode)</h1>
+        <div class="flex justify-between items-center mb-6 border-b-2 border-slate-300 pb-2">
+            <h1 class="text-sm font-bold text-slate-700 uppercase tracking-widest">Huawei Rehoming Generator</h1>
+            <span class="text-[9px] text-slate-500 font-medium">Versi Soft Elegant • Nano Text 6px</span>
+        </div>
 
-        <div class="grid grid-cols-7 gap-1 mb-4">
-            <div class="flex flex-col border-r border-blue-200 pr-1">
-                <label class="input-label">Tcont</label>
-                <textarea id="in_tcont" class="text-box h-20"></textarea>
-            </div>
-            <div class="flex flex-col border-r border-blue-200 pr-1">
-                <label class="input-label">Traffic</label>
-                <textarea id="in_traffic" class="text-box h-20"></textarea>
-            </div>
-            <div class="flex flex-col border-r border-blue-200 pr-1">
-                <label class="input-label">Srv Prof</label>
-                <textarea id="in_srv" class="text-box h-20"></textarea>
-            </div>
-            <div class="flex flex-col border-r border-blue-200 pr-1">
-                <label class="input-label">Line Prof</label>
-                <textarea id="in_line" class="text-box h-20"></textarea>
-            </div>
-            <div class="flex flex-col border-r border-blue-200 pr-1">
-                <label class="input-label text-indigo-700">Interface</label>
-                <textarea id="in_if" class="text-box h-20"></textarea>
-            </div>
-            <div class="flex flex-col border-r border-blue-200 pr-1">
-                <label class="input-label text-indigo-700">Srv Port</label>
-                <textarea id="in_sp" class="text-box h-20"></textarea>
+        <div class="grid grid-cols-7 gap-3 mb-8">
+            <div class="flex flex-col">
+                <label class="column-label">Tcont</label>
+                <textarea id="in_tcont" class="column-text border-strong h-24 bg-white"></textarea>
             </div>
             <div class="flex flex-col">
-                <label class="input-label text-red-700">New PON</label>
-                <input id="in_newpon" type="text" class="text-box mb-1" placeholder="0/2/2">
-                <button onclick="processData()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-1 rounded shadow-md border border-blue-900 uppercase text-[8px] mt-auto">Generate</button>
+                <label class="column-label">Traffic</label>
+                <textarea id="in_traffic" class="column-text border-strong h-24 bg-white"></textarea>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label">Srv Prof</label>
+                <textarea id="in_srv" class="column-text border-strong h-24 bg-white"></textarea>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label">Line Prof</label>
+                <textarea id="in_line" class="column-text border-strong h-24 bg-white"></textarea>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label text-blue-600">Interface</label>
+                <textarea id="in_if" class="column-text border-strong h-24 bg-white"></textarea>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label text-blue-600">Srv Port</label>
+                <textarea id="in_sp" class="column-text border-strong h-24 bg-white"></textarea>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label text-rose-600">New PON</label>
+                <input id="in_newpon" type="text" class="column-text border-strong mb-2 bg-white" placeholder="0/2/2">
+                <button onclick="processData()" class="w-full bg-slate-700 hover:bg-blue-600 text-white font-bold py-2 rounded shadow transition-all uppercase text-[9px] mt-auto">Generate</button>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-0 border border-blue-300 rounded overflow-hidden shadow-lg bg-white">
-            <div class="flex flex-col border-r border-blue-200">
-                <div class="flex justify-between items-center bg-blue-100 px-2 py-0.5 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">srv_prof_res</span>
-                    <button onclick="copyCol('res_srv')" class="bg-blue-600 hover:bg-blue-700 text-[7px] px-1 py-0 rounded text-white font-bold">COPY</button>
+        <div class="grid grid-cols-4 gap-3">
+            <div class="output-box">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
+                    <span class="column-label mb-0 text-slate-700">srv_prof_res</span>
+                    <button onclick="copyCol('res_srv')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_srv" class="result-container"></div>
+                <div id="res_srv" class="result-area column-text p-2 text-slate-800"></div>
             </div>
 
-            <div class="flex flex-col border-r border-blue-200">
-                <div class="flex justify-between items-center bg-blue-100 px-2 py-0.5 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">line_prof_res</span>
-                    <button onclick="copyCol('res_line')" class="bg-blue-600 hover:bg-blue-700 text-[7px] px-1 py-0 rounded text-white font-bold">COPY</button>
+            <div class="output-box">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
+                    <span class="column-label mb-0 text-slate-700">line_prof_res</span>
+                    <button onclick="copyCol('res_line')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_line" class="result-container"></div>
+                <div id="res_line" class="result-area column-text p-2 text-slate-800"></div>
             </div>
 
-            <div class="flex flex-col border-r border-blue-200">
-                <div class="flex justify-between items-center bg-blue-100 px-2 py-0.5 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">int_gpon_res</span>
-                    <button onclick="copyCol('res_if')" class="bg-blue-600 hover:bg-blue-700 text-[7px] px-1 py-0 rounded text-white font-bold">COPY</button>
+            <div class="output-box">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
+                    <span class="column-label mb-0 text-slate-700">int_gpon_res</span>
+                    <button onclick="copyCol('res_if')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_if" class="result-container"></div>
+                <div id="res_if" class="result-area column-text p-2 text-slate-800"></div>
             </div>
 
-            <div class="flex flex-col">
-                <div class="flex justify-between items-center bg-blue-100 px-2 py-0.5 border-b border-blue-200">
-                    <span class="text-[9px] font-bold text-blue-800">srv_port_res</span>
-                    <button onclick="copyCol('res_sp')" class="bg-blue-600 hover:bg-blue-700 text-[7px] px-1 py-0 rounded text-white font-bold">COPY</button>
+            <div class="output-box">
+                <div class="flex justify-between items-center bg-slate-200 px-2 py-1 border-b-2 border-slate-300">
+                    <span class="column-label mb-0 text-slate-700">srv_port_res</span>
+                    <button onclick="copyCol('res_sp')" class="bg-white hover:bg-blue-500 hover:text-white text-slate-700 text-[8px] px-2 py-0.5 rounded border border-slate-300 font-bold transition-all">COPY</button>
                 </div>
-                <div id="res_sp" class="result-container"></div>
+                <div id="res_sp" class="result-area column-text p-2 text-slate-800"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Mempertahankan logika pemetaan dari script python asli
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -117,7 +134,6 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                // Konversi data per kolom sesuai kebutuhan rehoming
                 document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
