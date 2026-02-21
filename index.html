@@ -50,13 +50,8 @@
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-start items-center mb-6 border-b-4 border-slate-900 pb-4">
-            <div class="flex items-center gap-4">
-                <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
-                    <img src="logo.jpg" alt="Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
-                </div>
-                <h1 class="text-2xl font-bold text-slate-900">Olt Huawei <span class="text-red-600">Rehoming Tools</span></h1>
-            </div>
+        <div class="flex justify-start items-center mb-6 border-b-4 border-slate-900 pb-4 text-slate-900">
+            <h1 class="text-2xl font-bold">Olt Huawei <span class="text-red-600">Rehoming Tools</span></h1>
         </div>
 
         <div class="reminder-box">
@@ -77,7 +72,7 @@
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table OLT BEFORE"></textarea>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="copas semua traffic table ip index OLT BEFORE"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
@@ -92,13 +87,14 @@
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-config" OLT BEFORE'></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-configuration port x/x/x" PON OLT BEFORE'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
+            
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
-                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center outline-none" placeholder="Contoh: 0/1/7">
+                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center outline-none" placeholder="0/1/7">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 text-[12px] tracking-widest transition-all">GENERATE</button>
                 </div>
             </div>
@@ -134,7 +130,7 @@
     </div>
 
     <script>
-        // Logika script tetap sama (Stable Version)
+        // Logika script tetap menggunakan versi paling stabil yang sudah kita uji sebelumnya
         function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
