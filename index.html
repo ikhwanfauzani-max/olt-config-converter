@@ -7,56 +7,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Font Calibri untuk teks umum */
-        body { 
-            font-family: 'Calibri', 'Candara', 'Segoe UI', 'Optima', 'Arial', sans-serif; 
-        }
+        body { font-family: 'Calibri', 'Candara', 'Segoe UI', sans-serif; }
         
-        /* Font Consolas untuk area konfigurasi */
         .mono-font { 
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-weight: 500;
         }
 
-        .column-text { 
-            @apply w-full text-[10px] leading-[1.3] outline-none p-2 transition-all mono-font; 
-        }
-
-        .column-label { 
-            @apply block text-[11px] font-bold mb-1 text-slate-800 tracking-tight text-center; 
-        }
-
-        .border-heavy { 
-            @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
-        }
-
+        .column-text { @apply w-full text-[10px] leading-[1.3] outline-none p-2 transition-all mono-font; }
+        .column-label { @apply block text-[11px] font-bold mb-1 text-slate-800 tracking-tight text-center; }
+        .border-heavy { @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; }
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
+        .output-card { @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; }
 
-        .output-card { 
-            @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
+        /* HEADER OUTPUT: BIRU MUDA TIPIS */
+        .output-header {
+            background-color: #e0f2fe; /* Biru muda sangat tipis (Sky-100) */
+            @apply px-3 py-2 flex justify-between items-center border-b-2 border-slate-900;
         }
 
-        /* Judul Kolom Output Biru Soft */
-        .output-header {
-            background-color: #3b82f6; /* Biru soft */
-            @apply px-3 py-2 flex justify-between items-center;
+        /* JUDUL: NAVY TUA BOLD, HURUF KECIL */
+        .output-title {
+            color: #0f172a; /* Navy Tua (Slate-900) */
+            @apply text-[11px] font-bold tracking-tight;
+            text-transform: none; /* Memastikan tidak kapital otomatis */
         }
 
         .result-area { 
             @apply flex-grow overflow-both whitespace-pre p-2 text-slate-900 mono-font; 
-            background-color: #e0f2fe; 
+            background-color: #ffffff; /* Background putih bersih untuk konfigurasi */
             font-size: 10px;
         }
 
-        .btn-clear-col {
-            @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all;
+        .btn-copy {
+            @apply bg-white hover:bg-slate-900 hover:text-white text-slate-900 text-[9px] px-3 py-1 font-bold border-2 border-slate-900 transition-all;
         }
 
-        .reminder-box {
-            background-color: #dbeafe;
-            @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900;
-        }
-
+        .btn-clear-col { @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all; }
+        .reminder-box { background-color: #dbeafe; @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900; }
+        
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
         ::-webkit-scrollbar-thumb { @apply bg-slate-900; }
@@ -96,7 +85,7 @@
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table ip index OLT BEFORE"></textarea>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table OLT BEFORE"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
@@ -111,7 +100,7 @@
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas hasil "display current-configuration port x/x/x " OLT BEFORE'></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-config" OLT BEFORE'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             
@@ -132,22 +121,22 @@
         <div class="grid grid-cols-3 gap-6">
             <div class="output-card">
                 <div class="output-header">
-                    <span class="text-[10px] font-bold text-white tracking-wider uppercase">01. output ont-srvprofile</span>
-                    <button onclick="copyCol('res_srv')" class="bg-white hover:bg-slate-100 text-blue-600 text-[9px] px-3 py-1 font-bold border border-blue-600 transition-all">Copy</button>
+                    <span class="output-title">01. output ont-srvprofile</span>
+                    <button onclick="copyCol('res_srv')" class="btn-copy">Copy</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="output-header">
-                    <span class="text-[10px] font-bold text-white tracking-wider uppercase">02. output ont-lineprofile</span>
-                    <button onclick="copyCol('res_line')" class="bg-white hover:bg-slate-100 text-blue-600 text-[9px] px-3 py-1 font-bold border border-blue-600 transition-all">Copy</button>
+                    <span class="output-title">02. output ont-lineprofile</span>
+                    <button onclick="copyCol('res_line')" class="btn-copy">Copy</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="output-header">
-                    <span class="text-[10px] font-bold text-white tracking-wider uppercase">03. output interface_gpon</span>
-                    <button onclick="copyCol('res_merged')" class="bg-white hover:bg-slate-100 text-blue-600 text-[9px] px-3 py-1 font-bold border border-blue-600 transition-all">Copy</button>
+                    <span class="output-title">03. output interface_gpon</span>
+                    <button onclick="copyCol('res_merged')" class="btn-copy">Copy</button>
                 </div>
                 <div id="res_merged" class="result-area"></div>
             </div>
@@ -155,6 +144,7 @@
     </div>
 
     <script>
+        // Logika script tetap versi terbaru
         function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
@@ -230,13 +220,13 @@
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
                 const originalText = btn.textContent;
-                btn.textContent = 'Done!';
-                btn.style.backgroundColor = '#16a34a'; // Warna hijau saat sukses
+                btn.textContent = 'DONE!';
+                btn.style.backgroundColor = '#22c55e'; // Hijau
                 btn.style.color = '#ffffff';
                 setTimeout(() => { 
                     btn.textContent = originalText; 
                     btn.style.backgroundColor = '#ffffff';
-                    btn.style.color = '#2563eb';
+                    btn.style.color = '#0f172a';
                 }, 1000);
             });
         }
