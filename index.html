@@ -5,29 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         
-        /* Font Mono Tebal untuk data OLT */
+        /* Area Kode: Tetap Mono Tebal */
         .column-text { 
             font-family: 'JetBrains Mono', monospace;
             @apply w-full text-[7px] leading-[1.2] outline-none p-2 transition-all font-bold; 
         }
         
-        /* Label Judul Berangka */
+        /* Label Judul: Hitam, Tebal Maksimal (900) */
         .column-label { 
-            @apply block text-[11px] font-black mb-1 uppercase text-slate-800 tracking-tighter text-center; 
+            @apply block text-[12px] font-[900] mb-1 uppercase text-slate-900 tracking-tighter text-center; 
         }
 
-        /* Border Hitam Tegas */
+        /* Border Hitam Pekat */
         .border-heavy { 
             @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
         }
 
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
 
-        /* Card Output dengan Border Boxy */
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
@@ -37,6 +36,7 @@
             @apply flex-grow overflow-both whitespace-pre bg-[#fdfdfd] text-[7px] text-slate-900 p-2 font-bold; 
         }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
         ::-webkit-scrollbar-thumb { @apply bg-slate-900; }
@@ -44,19 +44,23 @@
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-between items-center mb-6 border-b-4 border-slate-900 pb-4">
+        <div class="flex justify-between items-center mb-4 border-b-4 border-slate-900 pb-4">
             <div class="flex items-center gap-4">
-                <div class="bg-red-600 p-2 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                    <svg width="30" height="30" viewBox="0 0 40 40" fill="white" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 0C21.1 0 22 0.9 22 2V6C22 7.1 21.1 8 20 8C18.9 8 18 7.1 18 6V2C18 0.9 18.9 0 20 0ZM28.5 4.5C29.3 3.7 30.6 3.7 31.4 4.5L34.2 7.3C35 8.1 35 9.4 34.2 10.2C33.4 11 32.1 11 31.3 10.2L28.5 7.4C27.7 6.6 27.7 5.3 28.5 4.5ZM35.5 18C36.6 18 37.5 18.9 37.5 20C37.5 21.1 36.6 22 35.5 22H31.5C30.4 22 29.5 21.1 29.5 20C29.5 18.9 30.4 18 31.5 18H35.5ZM31.4 35.5C30.6 36.3 29.3 36.3 28.5 35.5L25.7 32.7C24.9 31.9 24.9 30.6 25.7 29.8C26.5 29 27.8 29 28.6 29.8L31.4 32.6C32.2 33.4 32.2 34.7 31.4 35.5ZM20 40C18.9 40 18 39.1 18 38V34C18 32.9 18.9 32 20 32C21.1 32 22 32.9 22 34V38C22 39.1 21.1 40 20 40ZM8.6 35.5C7.8 36.3 6.5 36.3 5.7 35.5L2.9 32.7C2.1 31.9 2.1 30.6 2.9 29.8C3.7 29 5 29 5.8 29.8L8.6 32.6C9.4 33.4 9.4 34.7 8.6 35.5ZM2.5 20C2.5 18.9 3.4 18 4.5 18H8.5C9.6 18 10.5 18.9 10.5 20C10.5 21.1 9.6 22 8.5 22H4.5C3.4 22 2.5 21.1 2.5 20ZM8.6 4.5C9.4 3.7 10.7 3.7 11.5 4.5L14.3 7.3C15.1 8.1 15.1 9.4 14.3 10.2C13.5 11 12.2 11 11.4 10.2L8.6 7.4C7.8 6.6 7.8 5.3 8.6 4.5Z" />
-                    </svg>
+                <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
+                    <img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
                 </div>
                 <div class="text-left">
                     <h1 class="text-2xl font-[900] text-slate-900 uppercase tracking-tighter leading-none">OLT Huawei <span class="text-red-600">Rehoming Tools</span></h1>
-                    <p class="text-[11px] text-slate-600 font-bold uppercase tracking-widest mt-1">Config Converter</p>
+                    <p class="text-[11px] text-slate-600 font-black uppercase tracking-widest mt-1">Integrated Config Converter</p>
                 </div>
             </div>
-            <button onclick="clearAll()" class="text-[10px] font-black text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase">Clear All Data</button>
+            <button onclick="clearAll()" class="text-[10px] font-[900] text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase">Clear All Data</button>
+        </div>
+
+        <div class="mb-4">
+            <h2 class="text-lg font-[900] text-red-600 uppercase tracking-tighter border-l-4 border-red-600 pl-3">
+                Input data dari OLT Before :
+            </h2>
         </div>
 
         <div class="grid grid-cols-7 gap-4 mb-8">
@@ -69,54 +73,53 @@
             
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <label class="block text-[10px] font-black text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-mono text-[14px] border-2 border-slate-900 p-2 mb-3 text-center font-black focus:bg-white outline-none" placeholder="0/2/2">
-                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
+                    <label class="block text-[10px] font-[900] text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
+                    <input id="in_newpon" type="text" class="w-full font-mono text-[14px] border-2 border-slate-900 p-2 mb-3 text-center font-[900] focus:bg-white outline-none" placeholder="0/2/2">
+                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-[900] py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
             </div>
+        </div>
+
+        <div class="mb-4">
+            <h2 class="text-lg font-[900] text-slate-900 uppercase tracking-tighter border-l-4 border-slate-900 pl-3">
+                Output data untuk OLT After :
+            </h2>
         </div>
 
         <div class="grid grid-cols-4 gap-6">
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-black text-white uppercase tracking-wider">Output Service Profile</span>
-                    <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-black border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">01. Output Service Profile</span>
+                    <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
-
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-black text-white uppercase tracking-wider">Output Line Profile</span>
-                    <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-black border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">02. Output Line Profile</span>
+                    <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
-
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-black text-white uppercase tracking-wider">Output Interface GPON</span>
-                    <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-black border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">03. Output Interface GPON</span>
+                    <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_if" class="result-area"></div>
             </div>
-
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-black text-white uppercase tracking-wider">Output Service Port</span>
-                    <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-black border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">04. Output Service Port</span>
+                    <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_sp" class="result-area"></div>
             </div>
         </div>
-
-        <footer class="mt-12 text-center pb-8">
-            <p class="text-[11px] text-slate-900 uppercase font-black tracking-[0.3em]">HUAWEI OLT REHOMING TOOL &bull; v2.0</p>
-        </footer>
     </div>
 
     <script>
-        // Logika script tetap sama seperti sebelumnya (termasuk wan-config)
+        // ... (Logika JavaScript tetap sama seperti sebelumnya) ...
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -130,7 +133,6 @@
                 if (!newPon.includes('/')) return alert("Format PON salah!");
                 const [f, s, p] = newPon.split('/');
                 const newFS = `${f}/${s}`;
-
                 const getLines = (id) => document.getElementById(id).value.split('\n');
                 const rawTcont = getLines('in_tcont');
                 const rawTraffic = getLines('in_traffic');
@@ -138,13 +140,11 @@
                 const rawLine = getLines('in_line');
                 const rawIf = getLines('in_if');
                 const rawSp = getLines('in_sp');
-
                 let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
                 rawTcont.forEach(l => extractMap(l, dbaMap));
                 rawTraffic.forEach(l => extractMap(l, trafficMap, true));
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
-
                 document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
@@ -165,9 +165,8 @@
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
                     return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
-
-                alert("Konversi Berhasil!");
-            } catch (e) { alert("Terjadi Kesalahan!"); }
+                alert("Berhasil!");
+            } catch (e) { alert("Error!"); }
         }
 
         function clearAll() {
@@ -183,16 +182,7 @@
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'DONE!';
-                btn.classList.add('bg-green-600');
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.classList.remove('bg-green-600');
-                }, 1000);
-            });
+            navigator.clipboard.writeText(text).then(() => alert("Copied!"));
         }
     </script>
 </body>
