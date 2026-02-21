@@ -94,6 +94,32 @@
     opacity: 0;
     animation: fadeIn 0.25s forwards;
 }
+            .btn-clear-col {
+    margin-top: 6px;
+    width: 100%;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #475569;
+    background-color: #e2e8f0;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-clear-col:hover {
+    background-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+
+.btn-clear-col.success {
+    background-color: #dc2626;
+    border-color: #991b1b;
+    color: white;
+    opacity: 0;
+    animation: fadeIn 0.25s forwards;
+}
             
 
 @keyframes fadeIn {
@@ -229,13 +255,21 @@
 </div>
 
     <script>
-        function clearField(id) { document.getElementById(id).value = ''; }
-        function extractMap(text, mapObj, isTraffic = false) {
-            if (!text) return;
-            const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
-            let match;
-            while ((match = regex.exec(text)) !== null) { mapObj[match[1]] = match[2]; }
-        }
+        function clearField(id) {
+    const textarea = document.getElementById(id);
+    const btn = event.target;
+
+    textarea.value = "";
+
+    btn.classList.add('success');
+    const originalText = btn.textContent;
+    btn.textContent = "CLEARED ✓";
+
+    setTimeout(() => {
+        btn.classList.remove('success');
+        btn.textContent = originalText;
+    }, 1000);
+}
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
