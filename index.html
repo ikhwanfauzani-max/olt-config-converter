@@ -13,7 +13,7 @@
             @apply w-full text-[7px] leading-[1.2] outline-none p-2 transition-all font-bold; 
         }
         .column-label { 
-            @apply block text-[12px] font-[900] mb-1 uppercase text-slate-900 tracking-tighter text-center; 
+            @apply block text-[11px] font-[900] mb-1 uppercase text-slate-900 tracking-tighter text-center; 
         }
         .border-heavy { 
             @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
@@ -26,7 +26,6 @@
             font-family: 'JetBrains Mono', monospace;
             @apply flex-grow overflow-both whitespace-pre bg-[#fdfdfd] text-[7px] text-slate-900 p-2 font-bold; 
         }
-        /* Tombol Clear di bawah kolom */
         .btn-clear-col {
             @apply mt-2 w-full text-[9px] font-black text-slate-600 hover:text-white hover:bg-slate-800 border-2 border-slate-900 py-1 transition-all uppercase;
         }
@@ -47,7 +46,7 @@
                     <p class="text-[11px] text-slate-600 font-black uppercase tracking-widest mt-1">Integrated Config Converter</p>
                 </div>
             </div>
-            <button onclick="clearAll()" class="text-[10px] font-[900] text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Reset All Data</button>
+            <button onclick="clearAll()" class="text-[10px] font-[900] text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-center">Reset All Data</button>
         </div>
 
         <div class="mb-4">
@@ -56,32 +55,32 @@
 
         <div class="grid grid-cols-7 gap-4 mb-8">
             <div class="flex flex-col">
-                <label class="column-label">01. dba</label>
+                <label class="column-label">01. dba_profile</label>
                 <textarea id="in_tcont" class="column-text border-heavy input-fill h-48"></textarea>
-                <button onclick="clearField('in_tcont')" class="btn-clear-col text-center">Clear</button>
+                <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
-                <label class="column-label">02. traffic</label>
+                <label class="column-label">02. traffic_profile</label>
                 <textarea id="in_traffic" class="column-text border-heavy input-fill h-48"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
-                <label class="column-label">03. service</label>
+                <label class="column-label">03. service_profile</label>
                 <textarea id="in_srv" class="column-text border-heavy input-fill h-48"></textarea>
                 <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
-                <label class="column-label">04. line</label>
+                <label class="column-label">04. line_profile</label>
                 <textarea id="in_line" class="column-text border-heavy input-fill h-48"></textarea>
                 <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
-                <label class="column-label">05. interface</label>
+                <label class="column-label">05. interface_gpon</label>
                 <textarea id="in_if" class="column-text border-heavy input-fill h-48"></textarea>
                 <button onclick="clearField('in_if')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
-                <label class="column-label">06. s-port</label>
+                <label class="column-label">06. service_port</label>
                 <textarea id="in_sp" class="column-text border-heavy input-fill h-48"></textarea>
                 <button onclick="clearField('in_sp')" class="btn-clear-col">Clear</button>
             </div>
@@ -92,7 +91,8 @@
                     <input id="in_newpon" type="text" class="w-full font-mono text-[14px] border-2 border-slate-900 p-2 mb-3 text-center font-[900] focus:bg-white outline-none" placeholder="0/2/2">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-[900] py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
-                <div class="h-[34px]"></div> </div>
+                <div class="h-[34px]"></div>
+            </div>
         </div>
 
         <div class="mb-4">
@@ -102,28 +102,28 @@
         <div class="grid grid-cols-4 gap-6">
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">01. Output Service Profile</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">01. Service Profile</span>
                     <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">02. Output Line Profile</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">02. Line Profile</span>
                     <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">03. Output Interface GPON</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">03. Interface GPON</span>
                     <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_if" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">04. Output Service Port</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">04. Service Port</span>
                     <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_sp" class="result-area"></div>
@@ -132,17 +132,13 @@
     </div>
 
     <script>
-        function clearField(id) {
-            document.getElementById(id).value = '';
-        }
-
+        function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
             let match;
             while ((match = regex.exec(text)) !== null) { mapObj[match[1]] = match[2]; }
         }
-
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
@@ -184,7 +180,6 @@
                 alert("Berhasil!");
             } catch (e) { alert("Error!"); }
         }
-
         function clearAll() {
             if (confirm("Hapus semua data?")) {
                 ['in_tcont', 'in_traffic', 'in_srv', 'in_line', 'in_if', 'in_sp', 'res_srv', 'res_line', 'res_if', 'res_sp'].forEach(id => {
@@ -194,19 +189,15 @@
                 });
             }
         }
-
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
                 const originalText = btn.textContent;
-                btn.textContent = 'COPIED!';
+                btn.textContent = 'DONE!';
                 btn.classList.add('bg-green-600');
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.classList.remove('bg-green-600');
-                }, 1000);
+                setTimeout(() => { btn.textContent = originalText; btn.classList.remove('bg-green-600'); }, 1000);
             });
         }
     </script>
