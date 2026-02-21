@@ -270,6 +270,17 @@
         btn.textContent = originalText;
     }, 1000);
 }
+        function extractMap(text, mapObj, isTraffic = false) {
+    if (!text) return;
+    const regex = isTraffic 
+        ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g
+        : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
+
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+        mapObj[match[1]] = match[2];
+    }
+}
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
