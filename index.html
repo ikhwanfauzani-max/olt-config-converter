@@ -51,7 +51,7 @@
             <h2 class="text-lg font-[900] text-red-600 uppercase tracking-tighter border-l-4 border-red-600 pl-3">Input data dari OLT Before :</h2>
         </div>
 
-        <div class="grid grid-cols-7 gap-4 mb-8">
+        <div class="grid grid-cols-6 gap-4 mb-8">
             <div class="flex flex-col">
                 <label class="column-label">01. dba-profile</label>
                 <textarea id="in_tcont" class="column-text border-heavy input-fill h-48"></textarea>
@@ -74,13 +74,8 @@
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_if" class="column-text border-heavy input-fill h-48"></textarea>
-                <button onclick="clearField('in_if')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">06. service_port</label>
-                <textarea id="in_sp" class="column-text border-heavy input-fill h-48"></textarea>
-                <button onclick="clearField('in_sp')" class="btn-clear-col">Clear</button>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder="Paste interface & service-port di sini..."></textarea>
+                <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             
             <div class="flex flex-col justify-end">
@@ -97,7 +92,7 @@
             <h2 class="text-lg font-[900] text-slate-900 uppercase tracking-tighter border-l-4 border-slate-900 pl-3">Output data untuk OLT After :</h2>
         </div>
 
-        <div class="grid grid-cols-4 gap-6">
+        <div class="grid grid-cols-3 gap-6">
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
                     <span class="text-[10px] font-bold text-white uppercase tracking-wider">01. Service Profile</span>
@@ -114,17 +109,10 @@
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">03. Interface GPON</span>
-                    <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">03. Interface & Service Port</span>
+                    <button onclick="copyCol('res_merged')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
                 </div>
-                <div id="res_if" class="result-area"></div>
-            </div>
-            <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">04. Service Port</span>
-                    <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
-                </div>
-                <div id="res_sp" class="result-area"></div>
+                <div id="res_merged" class="result-area"></div>
             </div>
         </div>
     </div>
@@ -143,25 +131,27 @@
                 if (!newPon.includes('/')) return alert("Format PON salah!");
                 const [f, s, p] = newPon.split('/');
                 const newFS = `${f}/${s}`;
-                const getLines = (id) => document.getElementById(id).value.split('\n');
-                const rawTcont = getLines('in_tcont');
-                const rawTraffic = getLines('in_traffic');
-                const rawSrv = getLines('in_srv');
-                const rawLine = getLines('in_line');
-                const rawIf = getLines('in_if');
-                const rawSp = getLines('in_sp');
+                
+                const rawTcont = document.getElementById('in_tcont').value.split('\n');
+                const rawTraffic = document.getElementById('in_traffic').value.split('\n');
+                const rawSrv = document.getElementById('in_srv').value.split('\n');
+                const rawLine = document.getElementById('in_line').value.split('\n');
+                const combinedData = document.getElementById('in_combined').value.split('\n');
+                
                 let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
                 rawTcont.forEach(l => extractMap(l, dbaMap));
                 rawTraffic.forEach(l => extractMap(l, trafficMap, true));
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
+
                 document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
-                document.getElementById('res_if').textContent = rawIf.map(t => {
+
+                const outIf = combinedData.filter(l => l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')).map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
                     txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
@@ -169,14 +159,18 @@
                     txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 }).join('\n');
-                document.getElementById('res_sp').textContent = rawSp.map(t => {
+
+                const outSp = combinedData.filter(l => l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
                     return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
+
+                document.getElementById('res_merged').textContent = (outIf.trim() + "\n\n" + outSp.trim()).trim();
+
                 alert("Berhasil!");
-            } catch (e) { alert("Error!"); }
+            } catch (e) { alert("Error! Cek kembali inputan."); }
         }
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
