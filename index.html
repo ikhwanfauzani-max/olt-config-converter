@@ -22,14 +22,16 @@
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
-        /* Warna Output: Huruf Hitam, Background Soft Biru */
         .result-area { 
             font-family: 'JetBrains Mono', monospace;
             @apply flex-grow overflow-both whitespace-pre p-2 font-bold text-slate-900; 
-            background-color: #e0f2fe; /* Soft Light Blue */
+            background-color: #e0f2fe; 
         }
         .btn-clear-col {
             @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
+        }
+        .reminder-box {
+            @apply mb-6 bg-yellow-100 border-l-8 border-yellow-500 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900;
         }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
@@ -38,7 +40,7 @@
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-start items-center mb-8 border-b-4 border-slate-900 pb-4">
+        <div class="flex justify-start items-center mb-6 border-b-4 border-slate-900 pb-4">
             <div class="flex items-center gap-4">
                 <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
                     <img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
@@ -49,6 +51,15 @@
             </div>
         </div>
 
+        <div class="reminder-box">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">⚠️</span>
+                <p class="text-sm font-[900] text-slate-900 uppercase tracking-tight">
+                    Reminder: <span class="text-red-600 font-black">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi konfigurasi ini!
+                </p>
+            </div>
+        </div>
+
         <div class="mb-4">
             <h2 class="text-lg font-[900] text-red-600 uppercase tracking-tighter border-l-4 border-red-600 pl-3">Input data dari OLT Before :</h2>
         </div>
@@ -56,27 +67,27 @@
         <div class="grid grid-cols-6 gap-4 mb-8">
             <div class="flex flex-col">
                 <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48"></textarea>
+                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile yang ada di OLT BEFORE"></textarea>
                 <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48"></textarea>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas semua traffic table ip index yang ada di OLT BEFORE"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48"></textarea>
+                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-srvprofile yang ada di OLT BEFORE"></textarea>
                 <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48"></textarea>
+                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-lineprofile yang ada di OLT BEFORE"></textarea>
                 <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder="Paste interface & service-port di sini..."></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas semua hasil dari "display current-configuration port x/x/x " pon OLT sebelumnya'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             
@@ -146,7 +157,6 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                // 01. Service Profile - Quit setelah commit
                 let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
                 let finalSrv = [];
                 srvLines.forEach(line => {
@@ -155,14 +165,12 @@
                 });
                 document.getElementById('res_srv').textContent = finalSrv.join('\n');
 
-                // 02. Line Profile
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
 
-                // 03. Interface & Service Port - Quit setelah ont port
                 let lastOntPortIndex = -1;
                 const outIfLines = combinedData.filter(l => (l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')) && !l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
