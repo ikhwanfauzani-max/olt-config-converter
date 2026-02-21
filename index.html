@@ -76,7 +76,7 @@
     color: white;
     font-size: 11px;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 5px 10px;
     border-radius: 4px;
     border: 1px solid #2563eb;
     cursor: pointer;
@@ -91,6 +91,7 @@
 .btn-copy-custom.success {
     background-color: #16a34a;
     border-color: #15803d;
+    color: white;
     opacity: 0;
     animation: fadeIn 0.25s forwards;
 }
@@ -221,7 +222,7 @@
             <span class="output-title">
                 01. output ont-srvprofile
             </span>
-            <button onclick="copyCol('res_srv')" class="btn-copy-custom">
+            <button onclick="copyCol('res_srv', this)" class="btn-copy-custom">
                 COPY
             </button>
         </div>
@@ -332,22 +333,23 @@
                 alert("Proses Berhasil!");
             } catch (e) { alert("Terjadi kesalahan proses!"); }
         }
-        function copyCol(id) {
-            const text = document.getElementById(id).textContent;
-            if(!text) return;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Done!';
-                btn.style.backgroundColor = '#16a34a'; // Warna hijau saat sukses
-                btn.style.color = '#ffffff';
-                setTimeout(() => { 
-                    btn.textContent = originalText; 
-                    btn.style.backgroundColor = '#ffffff';
-                    btn.style.color = '#2563eb';
-                }, 1000);
-            });
-        }
+     function copyCol(id, button) {
+    const text = document.getElementById(id).textContent;
+    if (!text) return;
+
+    navigator.clipboard.writeText(text).then(() => {
+
+        const originalText = button.textContent;
+
+        button.classList.add('success');
+        button.textContent = "COPIED ✓";
+
+        setTimeout(() => {
+            button.classList.remove('success');
+            button.textContent = originalText;
+        }, 1000);
+    });
+}
     </script>
 </body>
 </html>
