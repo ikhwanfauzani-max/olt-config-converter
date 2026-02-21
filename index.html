@@ -12,7 +12,6 @@
             font-family: 'JetBrains Mono', monospace;
             @apply w-full text-[7px] leading-[1.2] outline-none p-2 transition-all font-bold; 
         }
-        /* Label Judul: Ketebalan dikurangi ke Bold (700) */
         .column-label { 
             @apply block text-[11px] font-bold mb-1 uppercase text-slate-800 tracking-tight text-center; 
         }
@@ -27,7 +26,6 @@
             font-family: 'JetBrains Mono', monospace;
             @apply flex-grow overflow-both whitespace-pre bg-[#fdfdfd] text-[7px] text-slate-900 p-2 font-bold; 
         }
-        /* Tombol Clear: Ketebalan dikurangi */
         .btn-clear-col {
             @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
         }
@@ -38,7 +36,7 @@
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-between items-center mb-8 border-b-4 border-slate-900 pb-4">
+        <div class="flex justify-start items-center mb-8 border-b-4 border-slate-900 pb-4">
             <div class="flex items-center gap-4">
                 <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
                     <img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
@@ -47,7 +45,6 @@
                     <h1 class="text-2xl font-[900] text-slate-900 uppercase tracking-tighter leading-none">OLT Huawei <span class="text-red-600">Rehoming Tools</span></h1>
                 </div>
             </div>
-            <button onclick="clearAll()" class="text-[10px] font-bold text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Reset All Data</button>
         </div>
 
         <div class="mb-4">
@@ -89,7 +86,7 @@
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-mono text-[14px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="0/2/2">
+                    <input id="in_newpon" type="text" class="w-full font-mono text-[11px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="Contoh: 0/2/2">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
                 <div class="h-[34px]"></div>
@@ -180,15 +177,6 @@
                 }).join('\n');
                 alert("Berhasil!");
             } catch (e) { alert("Error!"); }
-        }
-        function clearAll() {
-            if (confirm("Hapus semua data?")) {
-                ['in_tcont', 'in_traffic', 'in_srv', 'in_line', 'in_if', 'in_sp', 'res_srv', 'res_line', 'res_if', 'res_sp'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el.tagName === 'TEXTAREA') el.value = '';
-                    else el.textContent = '';
-                });
-            }
         }
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
