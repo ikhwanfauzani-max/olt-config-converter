@@ -22,12 +22,11 @@
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
-        /* Warna teks output diubah ke Biru Muda/Cyan (#00FFFF) dengan background Biru Gelap (#001a33) */
+        /* Warna Output: Huruf Hitam, Background Soft Biru */
         .result-area { 
             font-family: 'JetBrains Mono', monospace;
-            @apply flex-grow overflow-both whitespace-pre p-2 font-bold; 
-            background-color: #001a33;
-            color: #00FFFF; 
+            @apply flex-grow overflow-both whitespace-pre p-2 font-bold text-slate-900; 
+            background-color: #e0f2fe; /* Soft Light Blue */
         }
         .btn-clear-col {
             @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
@@ -147,7 +146,7 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                // 01. Service Profile - Tambah quit setelah commit
+                // 01. Service Profile - Quit setelah commit
                 let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
                 let finalSrv = [];
                 srvLines.forEach(line => {
@@ -163,7 +162,7 @@
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
 
-                // 03. Interface & Service Port - Logika quit setelah ont port
+                // 03. Interface & Service Port - Quit setelah ont port
                 let lastOntPortIndex = -1;
                 const outIfLines = combinedData.filter(l => (l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')) && !l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
