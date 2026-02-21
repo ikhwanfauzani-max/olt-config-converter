@@ -332,22 +332,23 @@
                 alert("Proses Berhasil!");
             } catch (e) { alert("Terjadi kesalahan proses!"); }
         }
-        function copyCol(id) {
-            const text = document.getElementById(id).textContent;
-            if(!text) return;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Done!';
-                btn.style.backgroundColor = '#16a34a'; // Warna hijau saat sukses
-                btn.style.color = '#ffffff';
-                setTimeout(() => { 
-                    btn.textContent = originalText; 
-                    btn.style.backgroundColor = '#ffffff';
-                    btn.style.color = '#2563eb';
-                }, 1000);
-            });
-        }
+  function copyCol(id) {
+    const text = document.getElementById(id).textContent;
+    if(!text) return;
+
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+
+        btn.classList.add('success');
+        btn.textContent = 'COPIED ✓';
+
+        setTimeout(() => {
+            btn.classList.remove('success');
+            btn.textContent = originalText;
+        }, 1000);
+    });
+}
     </script>
 </body>
 </html>
