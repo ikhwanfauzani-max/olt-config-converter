@@ -95,7 +95,7 @@
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-mono text-[11px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="Contoh: 0/2/2">
+                    <input id="in_newpon" type="text" class="w-full font-mono text-[11px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="Contoh: 0/2/9">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
                 <div class="h-[34px]"></div>
@@ -190,11 +190,19 @@
                 }
                 if(lastOntPortIndex !== -1) outIfLines.splice(lastOntPortIndex + 1, 0, " quit");
 
+                // BAGIAN PERBAIKAN UTAMA:
                 const outSp = combinedData.filter(l => l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
-                    let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
+                    let txt = t.replace(/service-port\s+\d+/g, 'service-port')
+                               .replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
+                    
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
-                    return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
+                    
+                    // Regex lebih kuat untuk port desc dan angka di dalam kutip description
+                    txt = txt.replace(/port\s+desc\s+\d+\/\d+\/\d+/g, `port desc ${newPon}`);
+                    txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
+                    
+                    return txt;
                 }).join('\n');
 
                 document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSp.trim()).trim();
