@@ -8,35 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
-        /* Area Kode: Tetap Mono Tebal */
         .column-text { 
             font-family: 'JetBrains Mono', monospace;
             @apply w-full text-[7px] leading-[1.2] outline-none p-2 transition-all font-bold; 
         }
-        
-        /* Label Judul: Hitam, Tebal Maksimal (900) */
         .column-label { 
-            @apply block text-[12px] font-[900] mb-1 uppercase text-slate-900 tracking-tighter text-center; 
+            @apply block text-[11px] font-[900] uppercase text-slate-900 tracking-tighter; 
         }
-
-        /* Border Hitam Pekat */
         .border-heavy { 
             @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
         }
-
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
-
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
-
         .result-area { 
             font-family: 'JetBrains Mono', monospace;
             @apply flex-grow overflow-both whitespace-pre bg-[#fdfdfd] text-[7px] text-slate-900 p-2 font-bold; 
         }
-
-        /* Custom Scrollbar */
+        /* Tombol Clear Kecil */
+        .btn-clear-mini {
+            @apply text-[8px] bg-slate-200 hover:bg-red-600 hover:text-white px-1.5 py-0.5 border border-slate-900 transition-all font-black leading-none;
+        }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
         ::-webkit-scrollbar-thumb { @apply bg-slate-900; }
@@ -54,22 +47,61 @@
                     <p class="text-[11px] text-slate-600 font-black uppercase tracking-widest mt-1">Integrated Config Converter</p>
                 </div>
             </div>
-            <button onclick="clearAll()" class="text-[10px] font-[900] text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase">Clear All Data</button>
+            <button onclick="clearAll()" class="text-[10px] font-[900] text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase">Reset All Fields</button>
         </div>
 
         <div class="mb-4">
-            <h2 class="text-lg font-[900] text-red-600 uppercase tracking-tighter border-l-4 border-red-600 pl-3">
-                Input data dari OLT Before :
-            </h2>
+            <h2 class="text-lg font-[900] text-red-600 uppercase tracking-tighter border-l-4 border-red-600 pl-3">Input data dari OLT Before :</h2>
         </div>
 
         <div class="grid grid-cols-7 gap-4 mb-8">
-            <div class="flex flex-col"><label class="column-label">01. dba_profile</label><textarea id="in_tcont" class="column-text border-heavy input-fill h-48"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">02. traffic_profile</label><textarea id="in_traffic" class="column-text border-heavy input-fill h-48"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">03. service_profile</label><textarea id="in_srv" class="column-text border-heavy input-fill h-48"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">04. line_profile</label><textarea id="in_line" class="column-text border-heavy input-fill h-48"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">05. interface_gpon</label><textarea id="in_if" class="column-text border-heavy input-fill h-48"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">06. service_port</label><textarea id="in_sp" class="column-text border-heavy input-fill h-48"></textarea></div>
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="column-label">01. dba</label>
+                    <button onclick="clearField('in_tcont')" class="btn-clear-mini">X</button>
+                </div>
+                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48"></textarea>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="column-label">02. traffic</label>
+                    <button onclick="clearField('in_traffic')" class="btn-clear-mini">X</button>
+                </div>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48"></textarea>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="column-label">03. service</label>
+                    <button onclick="clearField('in_srv')" class="btn-clear-mini">X</button>
+                </div>
+                <textarea id="in_srv" class="column-text border-heavy input-fill h-48"></textarea>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="column-label">04. line</label>
+                    <button onclick="clearField('in_line')" class="btn-clear-mini">X</button>
+                </div>
+                <textarea id="in_line" class="column-text border-heavy input-fill h-48"></textarea>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="column-label">05. interface</label>
+                    <button onclick="clearField('in_if')" class="btn-clear-mini">X</button>
+                </div>
+                <textarea id="in_if" class="column-text border-heavy input-fill h-48"></textarea>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-1">
+                    <label class="column-label">06. s-port</label>
+                    <button onclick="clearField('in_sp')" class="btn-clear-mini">X</button>
+                </div>
+                <textarea id="in_sp" class="column-text border-heavy input-fill h-48"></textarea>
+            </div>
             
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -81,36 +113,34 @@
         </div>
 
         <div class="mb-4">
-            <h2 class="text-lg font-[900] text-slate-900 uppercase tracking-tighter border-l-4 border-slate-900 pl-3">
-                Output data untuk OLT After :
-            </h2>
+            <h2 class="text-lg font-[900] text-slate-900 uppercase tracking-tighter border-l-4 border-slate-900 pl-3">Output data untuk OLT After :</h2>
         </div>
 
         <div class="grid grid-cols-4 gap-6">
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">01. Output Service Profile</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">01. Service Profile</span>
                     <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">02. Output Line Profile</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">02. Line Profile</span>
                     <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">03. Output Interface GPON</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">03. Interface GPON</span>
                     <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_if" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">04. Output Service Port</span>
+                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">04. Service Port</span>
                     <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_sp" class="result-area"></div>
@@ -119,7 +149,10 @@
     </div>
 
     <script>
-        // ... (Logika JavaScript tetap sama seperti sebelumnya) ...
+        function clearField(id) {
+            document.getElementById(id).value = '';
+        }
+
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -182,7 +215,16 @@
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
-            navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'DONE!';
+                btn.classList.add('bg-green-600');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('bg-green-600');
+                }, 1000);
+            });
         }
     </script>
 </body>
