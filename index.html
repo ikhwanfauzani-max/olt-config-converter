@@ -31,7 +31,8 @@
             @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
         }
         .reminder-box {
-            @apply mb-6 bg-yellow-100 border-l-8 border-yellow-500 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900;
+            background-color: #dbeafe;
+            @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900;
         }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
@@ -53,9 +54,9 @@
 
         <div class="reminder-box">
             <div class="flex items-center gap-3">
-                <span class="text-2xl">⚠️</span>
-                <p class="text-sm font-[900] text-slate-900 uppercase tracking-tight">
-                    Reminder: <span class="text-red-600 font-black">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi konfigurasi ini!
+                <span class="text-2xl">ℹ️</span>
+                <p class="text-sm font-[900] text-blue-900 uppercase tracking-tight">
+                    Reminder: <span class="text-blue-700 font-black underline">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi konfigurasi ini!
                 </p>
             </div>
         </div>
@@ -87,7 +88,7 @@
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas semua hasil dari "display current-configuration port x/x/x " pon OLT sebelumnya'></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas semua hasil dari "display current-configuration port x/x/x " pon OLT BEFORE'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             
