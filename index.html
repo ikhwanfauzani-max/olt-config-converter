@@ -1,302 +1,353 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OLT Huawei Rehoming PON Tools</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLT Huawei Rehoming PON Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Font Calibri untuk teks umum */
+        body { 
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        /* Font Consolas untuk area konfigurasi */
+        .mono-font { 
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: 500;
+        }
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        .column-text { 
+    width: 100%;
+    font-size: 10px;
+    line-height: 1.3;
+    padding: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-weight: 500;
+        }
 
-<style>
+        .column-label { 
+    display: block;
+    font-size: 14px;          /* Dinaikkan */
+    font-weight: 700;         /* Sama seperti font-bold */
+    text-align: center;
+    margin-bottom: 6px;
+    color: #1e293b;
 
-body{
-    font-family:'Segoe UI',sans-serif;
-    background:#f0f2f5;
+    background-color: #efe1cf;  /* Coklat muda */
+    padding: 6px 8px;
+    border-left: 4px solid #a16207;  /* Aksen seperti h2 */
+    border-radius: 4px;
 }
 
-/* FONT MONO */
-.mono-font{
-    font-family:'Consolas','Courier New',monospace;
-    font-weight:500;
+        .border-heavy { 
+            @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
+        }
+
+        .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
+
+        .output-card { 
+            @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
+        }
+
+        /* Judul Kolom Output Biru Soft */
+
+.output-header {
+    background-color: rgba(59,130,246,0.15);
+    padding: 6px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #3b82f6;
+    border-bottom: 1px solid #93c5fd;
 }
 
-/* INPUT COLUMN */
-.column-text{
-    width:100%;
-    font-size:10px;
-    line-height:1.3;
-    padding:8px;
-    font-family:'Consolas','Courier New',monospace;
-    border:2px solid #0f172a;
-    outline:none;
+.output-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e3a8a;
 }
 
-.column-text:focus{
-    background:#fee2e2;
+.btn-copy-custom {
+    background-color: #3b82f6;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #2563eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* LABEL */
-.column-label{
-    display:block;
-    font-size:14px;
-    font-weight:700;
-    text-align:center;
-    margin-bottom:6px;
-    color:#1e293b;
-    background:#efe1cf;
-    padding:6px 8px;
-    border-left:4px solid #a16207;
-    border-radius:4px;
+.btn-copy-custom:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
 }
 
-/* REMINDER */
-.reminder-box{
-    background:#dbeafe;
-    border-left:8px solid #2563eb;
-    padding:16px;
-    margin-bottom:24px;
-    border:2px solid #0f172a;
-    box-shadow:4px 4px 0px 0px rgba(0,0,0,1);
+.btn-copy-custom.success {
+    background-color: #16a34a;
+    border-color: #15803d;
+    opacity: 0;
+    animation: fadeIn 0.25s forwards;
+}
+            .btn-clear-col {
+    margin-top: 6px;
+    width: 100%;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #475569;
+    background-color: #e2e8f0;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-/* OUTPUT CARD */
-.output-card{
-    background:white;
-    border:2px solid #0f172a;
-    display:flex;
-    flex-direction:column;
-    min-height:500px;
-    box-shadow:4px 4px 0px 0px rgba(0,0,0,1);
+.btn-clear-col:hover {
+    background-color: #cbd5e1;
+    transform: translateY(-1px);
 }
 
-.output-header{
-    background:rgba(59,130,246,0.15);
-    padding:6px 8px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-left:4px solid #3b82f6;
-    border-bottom:1px solid #93c5fd;
+.btn-clear-col.success {
+    background-color: #dc2626;
+    border-color: #991b1b;
+    color: white;
+    opacity: 0;
+    animation: fadeIn 0.25s forwards;
+}
+            
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.output-title{
-    font-size:14px;
-    font-weight:700;
-    color:#1e3a8a;
-}
+        .result-area { 
+            @apply flex-grow overflow-both whitespace-pre p-2 text-slate-900 mono-font; 
+            background-color: #e0f2fe; 
+            font-size: 10px;
+        }
 
-/* RESULT AREA */
-.result-area{
-    flex-grow:1;
-    overflow:auto;
-    white-space:pre;
-    padding:8px;
-    font-size:10px;
-    background:#e0f2fe;
-    font-family:'Consolas','Courier New',monospace;
-}
+        .btn-clear-col {
+            @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all;
+        }
 
-/* COPY BUTTON */
-.btn-copy-custom{
-    background:#3b82f6;
-    color:white;
-    font-size:11px;
-    font-weight:700;
-    padding:4px 10px;
-    border-radius:4px;
-    border:1px solid #2563eb;
-    cursor:pointer;
-    transition:all .3s ease;
-}
+        .reminder-box {
+            background-color: #dbeafe;
+            @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900;
+        }
 
-.btn-copy-custom:hover{
-    background:#2563eb;
-    transform:translateY(-1px);
-}
-
-.btn-copy-custom.success{
-    background:#16a34a;
-    border-color:#15803d;
-    opacity:0;
-    animation:fadeIn .25s forwards;
-}
-
-/* CLEAR BUTTON */
-.btn-clear-col{
-    margin-top:6px;
-    width:100%;
-    font-size:11px;
-    font-weight:700;
-    padding:5px;
-    border-radius:4px;
-    border:1px solid #475569;
-    background:#e2e8f0;
-    cursor:pointer;
-    transition:all .3s ease;
-}
-
-.btn-clear-col:hover{
-    background:#cbd5e1;
-    transform:translateY(-1px);
-}
-
-.btn-clear-col.success{
-    background:#dc2626;
-    border-color:#991b1b;
-    color:white;
-    opacity:0;
-    animation:fadeIn .25s forwards;
-}
-
-@keyframes fadeIn{
-    from{opacity:0;}
-    to{opacity:1;}
-}
-
-</style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { @apply bg-slate-200; }
+        ::-webkit-scrollbar-thumb { @apply bg-slate-900; }
+    </style>
 </head>
+<body class="bg-[#f0f2f5] p-4 md:p-8">
+    <div class="max-w-[100%] mx-auto">
+        <div class="flex justify-start items-center mb-6 border-b-4 border-slate-900 pb-4">
+            <div class="flex items-center gap-4">
+                <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
+                    <img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
+                </div>
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none">Olt Huawei <span class="text-red-600">Rehoming Tools</span></h1>
+                </div>
+            </div>
+        </div>
 
-<body class="p-4 md:p-8">
+        <div class="reminder-box">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">ℹ️</span>
+                <p class="text-sm font-semibold text-blue-900 tracking-tight">
+                    Reminder: <span class="text-blue-700 font-bold underline">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi konfigurasi ini!
+                </p>
+            </div>
+        </div>
 
-<div class="max-w-full mx-auto">
+        <div class="mb-4">
+            <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3">Input data dari Olt Before :</h2>
+        </div>
 
-<!-- HEADER -->
-<div class="flex items-center gap-4 mb-6 border-b-4 border-slate-900 pb-4">
-<div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
-<img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
-</div>
-<h1 class="text-2xl font-bold text-slate-900">
-Olt Huawei <span class="text-red-600">Rehoming Tools</span>
-</h1>
-</div>
+        <div class="grid grid-cols-6 gap-4 mb-8">
+            <div class="flex flex-col">
+                <label class="column-label">01. dba-profile</label>
+                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
+                <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label">02. traffic_table</label>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas semua traffic table ip index OLT BEFORE"></textarea>
+                <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label">03. ont-srvprofile</label>
+                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-srvprofile OLT BEFORE"></textarea>
+                <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label">04. ont-lineprofile</label>
+                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-lineprofile OLT BEFORE"></textarea>
+                <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
+            </div>
+            <div class="flex flex-col">
+                <label class="column-label">05. interface_gpon</label>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas hasil "display current-configuration port x/x/x " OLT BEFORE'></textarea>
+                <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
+            </div>
+            
+            <div class="flex flex-col justify-end">
+                <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
+                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
+                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all text-[12px] tracking-widest">Generate</button>
+                </div>
+                <div class="h-[34px]"></div>
+            </div>
+        </div>
 
-<!-- REMINDER -->
-<div class="reminder-box">
-<div class="flex items-center gap-3">
-<span class="text-2xl">ℹ️</span>
-<p class="text-sm font-semibold text-blue-900">
-Reminder:
-<span class="text-blue-700 font-bold underline">
-Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER
-</span>
-sebelum eksekusi konfigurasi ini!
-</p>
-</div>
-</div>
+        <div class="mb-4">
+            <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3">Output data untuk Olt After :</h2>
+        </div>
 
-<!-- INPUT TITLE -->
-<h2 class="text-lg font-bold text-red-600 border-l-4 border-red-600 pl-3 mb-4">
-Input data dari OLT Before:
-</h2>
+       <div class="grid grid-cols-3 gap-6">
 
-<!-- INPUT GRID -->
-<div class="grid grid-cols-6 gap-4 mb-8">
+    <div class="output-card">
+        <div class="output-header">
+            <span class="output-title">
+                01. output ont-srvprofile
+            </span>
+            <button onclick="copyCol('res_srv')" class="btn-copy-custom">
+                COPY
+            </button>
+        </div>
+        <div id="res_srv" class="result-area"></div>
+    </div>
 
-<div>
-<label class="column-label">01. dba-profile</label>
-<textarea id="in_tcont" class="column-text h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
-<button onclick="clearField('in_tcont',this)" class="btn-clear-col">Clear</button>
-</div>
+    <div class="output-card">
+        <div class="output-header">
+            <span class="output-title">
+                02. output ont-lineprofile
+            </span>
+            <button onclick="copyCol('res_line')" class="btn-copy-custom">
+                COPY
+            </button>
+        </div>
+        <div id="res_line" class="result-area"></div>
+    </div>
 
-<div>
-<label class="column-label">02. traffic_table</label>
-<textarea id="in_traffic" class="column-text h-48" placeholder="Copas semua traffic table OLT BEFORE"></textarea>
-<button onclick="clearField('in_traffic',this)" class="btn-clear-col">Clear</button>
-</div>
-
-<div>
-<label class="column-label">03. ont-srvprofile</label>
-<textarea id="in_srv" class="column-text h-48" placeholder="Copas semua ont-srvprofile OLT BEFORE"></textarea>
-<button onclick="clearField('in_srv',this)" class="btn-clear-col">Clear</button>
-</div>
-
-<div>
-<label class="column-label">04. ont-lineprofile</label>
-<textarea id="in_line" class="column-text h-48" placeholder="Copas semua ont-lineprofile OLT BEFORE"></textarea>
-<button onclick="clearField('in_line',this)" class="btn-clear-col">Clear</button>
-</div>
-
-<div>
-<label class="column-label">05. interface_gpon</label>
-<textarea id="in_combined" class="column-text h-48" placeholder='Copas hasil "display current-configuration port x/x/x"'></textarea>
-<button onclick="clearField('in_combined',this)" class="btn-clear-col">Clear</button>
-</div>
-
-<div class="flex flex-col justify-end">
-<div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-<label class="block text-[10px] font-bold text-white mb-2 text-center">
-New PON (f/s/p)
-</label>
-<input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center" placeholder="Contoh: 0/1/7">
-<button onclick="processData()" class="w-full bg-slate-900 text-white font-bold py-3">
-Generate
-</button>
-</div>
-</div>
-
-</div>
-
-<!-- OUTPUT TITLE -->
-<h2 class="text-lg font-bold text-slate-900 border-l-4 border-slate-900 pl-3 mb-4">
-Output data untuk OLT After:
-</h2>
-
-<div class="grid grid-cols-3 gap-6">
-
-<div class="output-card">
-<div class="output-header">
-<span class="output-title">01. output ont-srvprofile</span>
-<button onclick="copyCol('res_srv',this)" class="btn-copy-custom">COPY</button>
-</div>
-<div id="res_srv" class="result-area"></div>
-</div>
-
-<div class="output-card">
-<div class="output-header">
-<span class="output-title">02. output ont-lineprofile</span>
-<button onclick="copyCol('res_line',this)" class="btn-copy-custom">COPY</button>
-</div>
-<div id="res_line" class="result-area"></div>
-</div>
-
-<div class="output-card">
-<div class="output-header">
-<span class="output-title">03. output interface_gpon</span>
-<button onclick="copyCol('res_merged',this)" class="btn-copy-custom">COPY</button>
-</div>
-<div id="res_merged" class="result-area"></div>
-</div>
+    <div class="output-card">
+        <div class="output-header">
+            <span class="output-title">
+                03. output interface_gpon
+            </span>
+            <button onclick="copyCol('res_merged')" class="btn-copy-custom">
+                COPY
+            </button>
+        </div>
+        <div id="res_merged" class="result-area"></div>
+    </div>
 
 </div>
 
-</div>
+    <script>
+        function clearField(id) {
+    const textarea = document.getElementById(id);
+    const btn = event.target;
 
-<script>
+    textarea.value = "";
 
-function clearField(id,btn){
-document.getElementById(id).value="";
-btn.classList.add("success");
-btn.textContent="CLEARED ✓";
-setTimeout(()=>{btn.classList.remove("success");btn.textContent="Clear";},1000);
+    btn.classList.add('success');
+    const originalText = btn.textContent;
+    btn.textContent = "CLEARED ✓";
+
+    setTimeout(() => {
+        btn.classList.remove('success');
+        btn.textContent = originalText;
+    }, 1000);
 }
+        function processData() {
+            try {
+                const newPon = document.getElementById('in_newpon').value.trim();
+                if (!newPon.includes('/')) return alert("Format PON salah!");
+                const [f, s, p] = newPon.split('/');
+                const newFS = `${f}/${s}`;
+                
+                const rawTcont = document.getElementById('in_tcont').value.split('\n');
+                const rawTraffic = document.getElementById('in_traffic').value.split('\n');
+                const rawSrv = document.getElementById('in_srv').value.split('\n');
+                const rawLine = document.getElementById('in_line').value.split('\n');
+                const combinedData = document.getElementById('in_combined').value.split('\n');
+                
+                let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
+                rawTcont.forEach(l => extractMap(l, dbaMap));
+                rawTraffic.forEach(l => extractMap(l, trafficMap, true));
+                rawSrv.forEach(l => extractMap(l, srvMap));
+                rawLine.forEach(l => extractMap(l, lineMap));
 
-function copyCol(id,btn){
-const text=document.getElementById(id).textContent;
-if(!text)return;
-navigator.clipboard.writeText(text).then(()=>{
-btn.classList.add("success");
-btn.textContent="COPIED ✓";
-setTimeout(()=>{btn.classList.remove("success");btn.textContent="COPY";},1000);
-});
-}
+                let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
+                let finalSrv = [];
+                srvLines.forEach(line => {
+                    finalSrv.push(line);
+                    if(line.toLowerCase().includes("commit")) finalSrv.push(" quit");
+                });
+                document.getElementById('res_srv').textContent = finalSrv.join('\n');
 
-/* PROCESS FUNCTION TIDAK DIUBAH */
-function processData(){
-alert("Logic tetap sama seperti versi kamu sebelumnya");
-}
+                document.getElementById('res_line').textContent = rawLine.map(t => {
+                    if(!t.trim()) return "";
+                    let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
+                    return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
+                }).join('\n');
 
-</script>
+                let lastOntPortIndex = -1;
+                const outIfLines = combinedData.filter(l => {
+                    const line = l.trim();
+                    return (line.startsWith('interface gpon') || line.startsWith('ont ') || (line.startsWith('port ') && !line.includes('desc')) || line.startsWith('ont-lineprofile') || line.startsWith('ont-srvprofile')) && !line.includes('service-port');
+                }).map(t => {
+                    let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
+                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
+                    txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
+                    txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
+                    return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
+                });
 
+                for(let i = outIfLines.length - 1; i >= 0; i--) { if(outIfLines[i].includes('ont port')) { lastOntPortIndex = i; break; } }
+                if(lastOntPortIndex !== -1) outIfLines.splice(lastOntPortIndex + 1, 0, " quit");
+
+                const outSpAndDesc = combinedData.filter(l => l.includes('service-port') || l.includes('port') && l.includes('desc')).map(t => {
+                    let txt = t.trim();
+                    if(!txt) return "";
+                    txt = txt.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
+                    txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
+                    txt = txt.replace(/port\s+desc\s+\d+\/\d+\/\d+/g, `port desc ${newPon}`);
+                    txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
+                    return txt;
+                }).filter(l => l !== "");
+
+                document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSpAndDesc.join('\n').trim()).trim();
+                alert("Proses Berhasil!");
+            } catch (e) { alert("Terjadi kesalahan proses!"); }
+        }
+        function copyCol(id) {
+            const text = document.getElementById(id).textContent;
+            if(!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Done!';
+                btn.style.backgroundColor = '#16a34a'; // Warna hijau saat sukses
+                btn.style.color = '#ffffff';
+                setTimeout(() => { 
+                    btn.textContent = originalText; 
+                    btn.style.backgroundColor = '#ffffff';
+                    btn.style.color = '#2563eb';
+                }, 1000);
+            });
+        }
+    </script>
 </body>
 </html>
