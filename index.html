@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         .column-text { 
             font-family: 'JetBrains Mono', monospace;
             @apply w-full text-[7px] leading-[1.2] outline-none p-2 transition-all font-bold; 
         }
+        /* Label Judul: Ketebalan dikurangi ke Bold (700) */
         .column-label { 
-            @apply block text-[11px] font-[900] mb-1 uppercase text-slate-900 tracking-tighter text-center; 
+            @apply block text-[11px] font-bold mb-1 uppercase text-slate-800 tracking-tight text-center; 
         }
         .border-heavy { 
             @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
@@ -26,8 +27,9 @@
             font-family: 'JetBrains Mono', monospace;
             @apply flex-grow overflow-both whitespace-pre bg-[#fdfdfd] text-[7px] text-slate-900 p-2 font-bold; 
         }
+        /* Tombol Clear: Ketebalan dikurangi */
         .btn-clear-col {
-            @apply mt-2 w-full text-[9px] font-black text-slate-600 hover:text-white hover:bg-slate-800 border-2 border-slate-900 py-1 transition-all uppercase;
+            @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
         }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
@@ -36,17 +38,16 @@
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-between items-center mb-6 border-b-4 border-slate-900 pb-4">
+        <div class="flex justify-between items-center mb-8 border-b-4 border-slate-900 pb-4">
             <div class="flex items-center gap-4">
                 <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
                     <img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
                 </div>
                 <div class="text-left">
                     <h1 class="text-2xl font-[900] text-slate-900 uppercase tracking-tighter leading-none">OLT Huawei <span class="text-red-600">Rehoming Tools</span></h1>
-                    <p class="text-[11px] text-slate-600 font-black uppercase tracking-widest mt-1">Integrated Config Converter</p>
                 </div>
             </div>
-            <button onclick="clearAll()" class="text-[10px] font-[900] text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-center">Reset All Data</button>
+            <button onclick="clearAll()" class="text-[10px] font-bold text-white bg-slate-900 hover:bg-red-600 px-4 py-2 border-2 border-slate-900 transition-all uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Reset All Data</button>
         </div>
 
         <div class="mb-4">
@@ -87,9 +88,9 @@
             
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <label class="block text-[10px] font-[900] text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-mono text-[14px] border-2 border-slate-900 p-2 mb-3 text-center font-[900] focus:bg-white outline-none" placeholder="0/2/2">
-                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-[900] py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
+                    <label class="block text-[10px] font-bold text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
+                    <input id="in_newpon" type="text" class="w-full font-mono text-[14px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="0/2/2">
+                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
                 <div class="h-[34px]"></div>
             </div>
@@ -102,29 +103,29 @@
         <div class="grid grid-cols-4 gap-6">
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">01. Service Profile</span>
-                    <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">01. Service Profile</span>
+                    <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">02. Line Profile</span>
-                    <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">02. Line Profile</span>
+                    <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">03. Interface GPON</span>
-                    <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">03. Interface GPON</span>
+                    <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_if" class="result-area"></div>
             </div>
             <div class="output-card">
                 <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-[900] text-white uppercase tracking-wider">04. Service Port</span>
-                    <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-[900] border border-white transition-all">COPY</button>
+                    <span class="text-[10px] font-bold text-white uppercase tracking-wider">04. Service Port</span>
+                    <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">COPY</button>
                 </div>
                 <div id="res_sp" class="result-area"></div>
             </div>
