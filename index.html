@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Calibri', 'Candara', 'Segoe UI', sans-serif; }
         
@@ -20,30 +20,31 @@
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
         .output-card { @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; }
 
-        /* HEADER OUTPUT: BIRU MUDA TIPIS */
+        /* HEADER OUTPUT NAVY GELAP */
         .output-header {
-            background-color: #e0f2fe; /* Biru muda sangat tipis (Sky-100) */
+            background-color: #0f172a; /* Navy Tua (Slate-900) */
             @apply px-3 py-2 flex justify-between items-center border-b-2 border-slate-900;
         }
 
-        /* JUDUL: NAVY TUA BOLD, HURUF KECIL */
         .output-title {
-            color: #0f172a; /* Navy Tua (Slate-900) */
-            @apply text-[11px] font-bold tracking-tight;
-            text-transform: none; /* Memastikan tidak kapital otomatis */
+            @apply text-[11px] font-bold text-white tracking-tight;
+            text-transform: none; 
         }
 
         .result-area { 
             @apply flex-grow overflow-both whitespace-pre p-2 text-slate-900 mono-font; 
-            background-color: #ffffff; /* Background putih bersih untuk konfigurasi */
+            background-color: #f8fafc;
             font-size: 10px;
         }
 
+        /* TOMBOL COPY KONTRAS TINGGI */
         .btn-copy {
-            @apply bg-white hover:bg-slate-900 hover:text-white text-slate-900 text-[9px] px-3 py-1 font-bold border-2 border-slate-900 transition-all;
+            background-color: #facc15; /* Kuning Stabilo */
+            @apply text-slate-900 text-[10px] px-3 py-1 font-black border-2 border-slate-900 transition-all shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] uppercase;
         }
+        .btn-copy:hover { @apply bg-yellow-500; }
 
-        .btn-clear-col { @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all; }
+        .btn-clear-col { @apply mt-2 w-full text-[9px] font-bold text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-300 hover:border-slate-900 py-1 transition-all; }
         .reminder-box { background-color: #dbeafe; @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900; }
         
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -80,34 +81,34 @@
         <div class="grid grid-cols-6 gap-4 mb-8">
             <div class="flex flex-col">
                 <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
+                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile"></textarea>
                 <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table OLT BEFORE"></textarea>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-srvprofile OLT BEFORE"></textarea>
+                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-srvprofile"></textarea>
                 <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-lineprofile OLT BEFORE"></textarea>
+                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-lineprofile"></textarea>
                 <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-config" OLT BEFORE'></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-config"'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
-                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
+                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center focus:bg-white outline-none" placeholder="0/1/7">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all text-[12px] tracking-widest">Generate</button>
                 </div>
                 <div class="h-[34px]"></div>
@@ -144,7 +145,6 @@
     </div>
 
     <script>
-        // Logika script tetap versi terbaru
         function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
@@ -220,12 +220,12 @@
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
                 const originalText = btn.textContent;
-                btn.textContent = 'DONE!';
+                btn.textContent = 'BERHASIL!';
                 btn.style.backgroundColor = '#22c55e'; // Hijau
                 btn.style.color = '#ffffff';
                 setTimeout(() => { 
                     btn.textContent = originalText; 
-                    btn.style.backgroundColor = '#ffffff';
+                    btn.style.backgroundColor = '#facc15'; 
                     btn.style.color = '#0f172a';
                 }, 1000);
             });
