@@ -3,69 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huawei OLT Rehoming - Blue Fill Edition</title>
+    <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .column-text { @apply w-full font-mono text-[6px] leading-[1.1] outline-none p-2 transition-all; }
-        .column-label { @apply block text-[10px] font-bold mb-1 uppercase text-[#1e3a8a] tracking-wider text-center; }
-        .border-sharp { @apply border-2 border-slate-500 focus:border-blue-600 rounded-none shadow-sm; }
-        .input-fill { @apply bg-[#f0f7ff] text-slate-900; }
-        .output-card { @apply bg-white border-2 border-slate-500 flex flex-col min-h-[500px] shadow-md; }
-        .result-area { @apply flex-grow overflow-both whitespace-pre bg-white font-mono text-[6px] text-slate-800 p-2; }
+        .column-label { @apply block text-[10px] font-extrabold mb-1 uppercase text-slate-600 tracking-tighter text-center; }
+        .border-sharp { @apply border border-slate-400 focus:border-red-600 focus:ring-1 focus:ring-red-200 rounded-sm shadow-sm; }
+        .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
+        .output-card { @apply bg-white border border-slate-300 flex flex-col min-h-[500px] shadow-sm hover:shadow-md transition-shadow; }
+        .result-area { @apply flex-grow overflow-both whitespace-pre bg-[#fafafa] font-mono text-[6px] text-slate-800 p-2; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { @apply bg-slate-100; }
+        ::-webkit-scrollbar-thumb { @apply bg-slate-400 rounded-full; }
     </style>
 </head>
-<body class="bg-[#f2f6f8] p-6">
+<body class="bg-[#f8fafc] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <h1 class="text-sm font-bold text-[#1e3a8a] mb-6 border-b-2 border-slate-500 pb-2 uppercase tracking-widest text-center">Huawei Rehoming Generator</h1>
+        <div class="flex justify-between items-center mb-6 border-b-2 border-red-600 pb-4">
+            <div class="flex items-center gap-4">
+                <svg width="50" height="50" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 0C21.1 0 22 0.9 22 2V6C22 7.1 21.1 8 20 8C18.9 8 18 7.1 18 6V2C18 0.9 18.9 0 20 0ZM28.5 4.5C29.3 3.7 30.6 3.7 31.4 4.5L34.2 7.3C35 8.1 35 9.4 34.2 10.2C33.4 11 32.1 11 31.3 10.2L28.5 7.4C27.7 6.6 27.7 5.3 28.5 4.5ZM35.5 18C36.6 18 37.5 18.9 37.5 20C37.5 21.1 36.6 22 35.5 22H31.5C30.4 22 29.5 21.1 29.5 20C29.5 18.9 30.4 18 31.5 18H35.5ZM31.4 35.5C30.6 36.3 29.3 36.3 28.5 35.5L25.7 32.7C24.9 31.9 24.9 30.6 25.7 29.8C26.5 29 27.8 29 28.6 29.8L31.4 32.6C32.2 33.4 32.2 34.7 31.4 35.5ZM20 40C18.9 40 18 39.1 18 38V34C18 32.9 18.9 32 20 32C21.1 32 22 32.9 22 34V38C22 39.1 21.1 40 20 40ZM8.6 35.5C7.8 36.3 6.5 36.3 5.7 35.5L2.9 32.7C2.1 31.9 2.1 30.6 2.9 29.8C3.7 29 5 29 5.8 29.8L8.6 32.6C9.4 33.4 9.4 34.7 8.6 35.5ZM2.5 20C2.5 18.9 3.4 18 4.5 18H8.5C9.6 18 10.5 18.9 10.5 20C10.5 21.1 9.6 22 8.5 22H4.5C3.4 22 2.5 21.1 2.5 20ZM8.6 4.5C9.4 3.7 10.7 3.7 11.5 4.5L14.3 7.3C15.1 8.1 15.1 9.4 14.3 10.2C13.5 11 12.2 11 11.4 10.2L8.6 7.4C7.8 6.6 7.8 5.3 8.6 4.5Z" fill="#ED1C24"/>
+                </svg>
+                <div class="text-left">
+                    <h1 class="text-xl font-black text-slate-800 uppercase tracking-tighter">OLT Huawei <span class="text-red-600">Rehoming PON Tools</span></h1>
+                    <p class="text-[10px] text-slate-500 font-medium italic">Integrated Configuration Converter</p>
+                </div>
+            </div>
+            <button onclick="clearAll()" class="text-[10px] font-bold text-rose-600 hover:text-white border border-rose-600 hover:bg-rose-600 px-3 py-1 transition-all uppercase">Clear All Data</button>
+        </div>
 
-        <div class="grid grid-cols-7 gap-3 mb-10">
-            <div class="flex flex-col"><label class="column-label">dba_profile</label><textarea id="in_tcont" class="column-text border-sharp input-fill h-40"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">traffic_profile</label><textarea id="in_traffic" class="column-text border-sharp input-fill h-40"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">service_profile</label><textarea id="in_srv" class="column-text border-sharp input-fill h-40"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">line_profile</label><textarea id="in_line" class="column-text border-sharp input-fill h-40"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">interface_gpon</label><textarea id="in_if" class="column-text border-sharp input-fill h-40"></textarea></div>
-            <div class="flex flex-col"><label class="column-label">service_port</label><textarea id="in_sp" class="column-text border-sharp input-fill h-40"></textarea></div>
+        <div class="grid grid-cols-7 gap-3 mb-8">
+            <div class="flex flex-col"><label class="column-label">dba_profile</label><textarea id="in_tcont" class="column-text border-sharp input-fill h-48" placeholder="Paste dba..."></textarea></div>
+            <div class="flex flex-col"><label class="column-label">traffic_profile</label><textarea id="in_traffic" class="column-text border-sharp input-fill h-48" placeholder="Paste traffic..."></textarea></div>
+            <div class="flex flex-col"><label class="column-label">service_profile</label><textarea id="in_srv" class="column-text border-sharp input-fill h-48" placeholder="Paste service..."></textarea></div>
+            <div class="flex flex-col"><label class="column-label">line_profile</label><textarea id="in_line" class="column-text border-sharp input-fill h-48" placeholder="Paste line..."></textarea></div>
+            <div class="flex flex-col"><label class="column-label">interface_gpon</label><textarea id="in_if" class="column-text border-sharp input-fill h-48" placeholder="Paste interface..."></textarea></div>
+            <div class="flex flex-col"><label class="column-label">service_port</label><textarea id="in_sp" class="column-text border-sharp input-fill h-48" placeholder="Paste service-port..."></textarea></div>
             
             <div class="flex flex-col justify-end">
-                <label class="column-label text-rose-700">New PON (F/S/P)</label>
-                <input id="in_newpon" type="text" class="column-text border-sharp input-fill mb-2 font-bold text-center" placeholder="0/2/2">
-                <button onclick="processData()" class="w-full bg-[#1e3a8a] hover:bg-blue-700 text-white font-bold py-3 shadow-lg transition-all uppercase text-[10px] border-2 border-slate-900">Generate</button>
+                <div class="bg-red-50 p-3 border-2 border-red-600">
+                    <label class="block text-[9px] font-black text-red-700 uppercase mb-1 text-center">New PON (F/S/P)</label>
+                    <input id="in_newpon" type="text" class="w-full font-mono text-[12px] border-2 border-red-600 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="0/2/2">
+                    <button onclick="processData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 shadow-md transition-all uppercase text-[11px]">Generate</button>
+                </div>
             </div>
         </div>
 
         <div class="grid grid-cols-4 gap-4">
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
-                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_service_profile</span>
-                    <button onclick="copyCol('res_srv')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
+                <div class="flex justify-between items-center bg-slate-800 px-3 py-2">
+                    <span class="text-[9px] font-bold text-white uppercase tracking-wider">Output Service Profile</span>
+                    <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-0.5 font-bold transition-all shadow-sm">COPY</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
 
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
-                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_line_profile</span>
-                    <button onclick="copyCol('res_line')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
+                <div class="flex justify-between items-center bg-slate-800 px-3 py-2">
+                    <span class="text-[9px] font-bold text-white uppercase tracking-wider">Output Line Profile</span>
+                    <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-0.5 font-bold transition-all shadow-sm">COPY</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
 
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
-                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_interface_gpon</span>
-                    <button onclick="copyCol('res_if')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
+                <div class="flex justify-between items-center bg-slate-800 px-3 py-2">
+                    <span class="text-[9px] font-bold text-white uppercase tracking-wider">Output Interface GPON</span>
+                    <button onclick="copyCol('res_if')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-0.5 font-bold transition-all shadow-sm">COPY</button>
                 </div>
                 <div id="res_if" class="result-area"></div>
             </div>
 
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-200 px-2 py-1.5 border-b-2 border-slate-500">
-                    <span class="text-[10px] font-bold text-slate-800 uppercase">output_service_port</span>
-                    <button onclick="copyCol('res_sp')" class="bg-white hover:bg-slate-800 hover:text-white text-slate-800 text-[8px] px-2 py-0.5 border-2 border-slate-500 font-bold transition-all">COPY</button>
+                <div class="flex justify-between items-center bg-slate-800 px-3 py-2">
+                    <span class="text-[9px] font-bold text-white uppercase tracking-wider">Output Service Port</span>
+                    <button onclick="copyCol('res_sp')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-0.5 font-bold transition-all shadow-sm">COPY</button>
                 </div>
                 <div id="res_sp" class="result-area"></div>
             </div>
         </div>
+
+        <footer class="mt-8 text-center">
+            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-[0.2em]">OLT Huawei Rehoming Tools &bull; 2024</p>
+        </footer>
     </div>
 
     <script>
@@ -79,7 +99,7 @@
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
-                if (!newPon.includes('/')) return alert("Format PON salah!");
+                if (!newPon.includes('/')) return alert("Format PON salah! Contoh: 0/2/2");
                 const [f, s, p] = newPon.split('/');
                 const newFS = `${f}/${s}`;
 
@@ -108,10 +128,7 @@
                 document.getElementById('res_if').textContent = rawIf.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
-                    
-                    // PERUBAHAN DI SINI: Menambahkan wan-config ke dalam daftar deteksi
                     txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
-                    
                     txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
                     txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
@@ -124,14 +141,33 @@
                     return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
 
-                alert("Berhasil dikonversi!");
-            } catch (e) { alert("Terjadi kesalahan teknis!"); }
+                alert("Konversi Berhasil!");
+            } catch (e) { alert("Error: Periksa kembali input Anda."); }
+        }
+
+        function clearAll() {
+            if (confirm("Hapus semua data?")) {
+                ['in_tcont', 'in_traffic', 'in_srv', 'in_line', 'in_if', 'in_sp', 'res_srv', 'res_line', 'res_if', 'res_sp'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el.tagName === 'TEXTAREA') el.value = '';
+                    else el.textContent = '';
+                });
+            }
         }
 
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
-            navigator.clipboard.writeText(text).then(() => alert("Berhasil disalin ke clipboard!"));
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'COPIED!';
+                btn.classList.replace('bg-red-600', 'bg-green-600');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.replace('bg-green-600', 'bg-red-600');
+                }, 1000);
+            });
         }
     </script>
 </body>
