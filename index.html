@@ -22,11 +22,11 @@
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
-        /* Warna teks output diubah ke Orange Muda (#FFB347) */
+        /* Warna teks output diubah ke Hijau Muda (#98FB98) */
         .result-area { 
             font-family: 'JetBrains Mono', monospace;
             @apply flex-grow overflow-both whitespace-pre bg-[#1a1a1a] p-2 font-bold; 
-            color: #FFB347; 
+            color: #98FB98; 
         }
         .btn-clear-col {
             @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
@@ -146,14 +146,25 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
+                // 01. Service Profile - Tambah quit setelah commit
+                let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
+                let finalSrv = [];
+                srvLines.forEach(line => {
+                    finalSrv.push(line);
+                    if(line.toLowerCase().includes("commit")) {
+                        finalSrv.push(" quit");
+                    }
+                });
+                document.getElementById('res_srv').textContent = finalSrv.join('\n');
+
+                // 02. Line Profile
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
 
-                // Filter Interface & Logic Quit setelah ont port
+                // 03. Interface & Service Port - Logika quit setelah ont port
                 let lastOntPortIndex = -1;
                 const outIfLines = combinedData.filter(l => (l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')) && !l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
@@ -164,20 +175,16 @@
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 });
 
-                // Cari baris terakhir yang mengandung 'ont port'
                 for(let i = outIfLines.length - 1; i >= 0; i--) {
                     if(outIfLines[i].includes('ont port')) {
                         lastOntPortIndex = i;
                         break;
                     }
                 }
-
-                // Sisipkan ' quit' setelah baris 'ont port' terakhir
                 if(lastOntPortIndex !== -1) {
                     outIfLines.splice(lastOntPortIndex + 1, 0, " quit");
                 }
 
-                // Filter Service Port (diambil hanya service-port saja)
                 const outSp = combinedData.filter(l => l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
