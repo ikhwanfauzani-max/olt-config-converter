@@ -151,7 +151,8 @@
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
 
-                const outIf = combinedData.filter(l => l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')).map(t => {
+                // Filter Interface (Tanpa mengikutkan baris service-port)
+                const outIf = combinedData.filter(l => (l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')) && !l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
                     txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
@@ -160,6 +161,7 @@
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 }).join('\n');
 
+                // Filter Service Port
                 const outSp = combinedData.filter(l => l.includes('service-port')).map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
@@ -167,7 +169,9 @@
                     return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
 
-                document.getElementById('res_merged').textContent = (outIf.trim() + "\n\n" + outSp.trim()).trim();
+                // Hasil akhir: Interface + quit + baris kosong + Service Port
+                const finalMerged = outIf.trim() + "\n quit\n\n" + outSp.trim();
+                document.getElementById('res_merged').textContent = finalMerged;
 
                 alert("Berhasil!");
             } catch (e) { alert("Error! Cek kembali inputan."); }
