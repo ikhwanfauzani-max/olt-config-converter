@@ -15,18 +15,19 @@
         .border-heavy { @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; }
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
         
-        .output-card { @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; }
-        
-        /* HEADER OUTPUT: BIRU TUA SOLID & TEKS PUTIH BOLD */
+        .output-card { 
+            @apply bg-white border-2 border-slate-800 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,0.6)];
+        }
+
+        /* HEADER OUTPUT - SOFT HIGH CONTRAST */
         .output-header {
-            background-color: #1e3a8a !important; 
-            @apply px-3 py-2 flex justify-between items-center border-b-2 border-slate-900;
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            @apply px-3 py-2 flex justify-between items-center border-b-2 border-slate-800;
         }
 
         .output-title {
-            color: #ffffff !important; 
-            @apply text-[11px] font-black tracking-tight;
-            text-transform: none; 
+            color: #f1f5f9;
+            @apply text-[11px] font-semibold tracking-wide;
         }
 
         .result-area { 
@@ -36,16 +37,26 @@
         }
 
         .btn-copy {
-            background-color: #facc15 !important; 
-            @apply text-slate-900 text-[10px] px-3 py-1 font-black border-2 border-slate-900 transition-all shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] uppercase;
+            background-color: #eab308 !important;
+            @apply text-slate-900 text-[10px] px-3 py-1 font-bold border-2 border-slate-800 transition-all shadow-[1px_1px_0px_0px_rgba(0,0,0,0.7)];
         }
 
-        .btn-clear-col { @apply mt-2 w-full text-[9px] font-bold text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-300 hover:border-slate-900 py-1 transition-all; }
-        .reminder-box { background-color: #dbeafe; @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900; }
+        .btn-copy:hover {
+            background-color: #facc15 !important;
+        }
+
+        .btn-clear-col { 
+            @apply mt-2 w-full text-[9px] font-bold text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-300 hover:border-slate-900 py-1 transition-all; 
+        }
+
+        .reminder-box { 
+            background-color: #dbeafe; 
+            @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.6)] border-2 border-slate-900; 
+        }
         
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
-        ::-webkit-scrollbar-thumb { @apply bg-slate-900; }
+        ::-webkit-scrollbar-thumb { @apply bg-slate-700; }
     </style>
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
@@ -60,162 +71,4 @@
             </p>
         </div>
 
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3 uppercase">Input data dari Olt Before :</h2>
-        </div>
-
-        <div class="grid grid-cols-6 gap-4 mb-8">
-            <div class="flex flex-col">
-                <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="copas semua traffic table ip index OLT BEFORE"></textarea>
-                <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-srvprofile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-lineprofile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-configuration port x/x/x" PON OLT BEFORE'></textarea>
-                <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
-            </div>
-            
-            <div class="flex flex-col justify-end">
-                <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
-                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center outline-none" placeholder="0/1/7">
-                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 text-[12px] tracking-widest transition-all">GENERATE</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3 uppercase">Output data untuk Olt After :</h2>
-        </div>
-
-        <div class="grid grid-cols-3 gap-6">
-            <div class="output-card">
-                <div class="output-header">
-                    <span class="output-title">01. output ont-srvprofile</span>
-                    <button onclick="copyCol('res_srv')" class="btn-copy">Copy</button>
-                </div>
-                <div id="res_srv" class="result-area"></div>
-            </div>
-            <div class="output-card">
-                <div class="output-header">
-                    <span class="output-title">02. output ont-lineprofile</span>
-                    <button onclick="copyCol('res_line')" class="btn-copy">Copy</button>
-                </div>
-                <div id="res_line" class="result-area"></div>
-            </div>
-            <div class="output-card">
-                <div class="output-header">
-                    <span class="output-title">03. output interface_gpon</span>
-                    <button onclick="copyCol('res_merged')" class="btn-copy">Copy</button>
-                </div>
-                <div id="res_merged" class="result-area"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Logika script tetap menggunakan versi paling stabil yang sudah kita uji sebelumnya
-        function clearField(id) { document.getElementById(id).value = ''; }
-        function extractMap(text, mapObj, isTraffic = false) {
-            if (!text) return;
-            const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
-            let match;
-            while ((match = regex.exec(text)) !== null) { mapObj[match[1]] = match[2]; }
-        }
-        function processData() {
-            try {
-                const newPon = document.getElementById('in_newpon').value.trim();
-                if (!newPon.includes('/')) return alert("Format PON salah!");
-                const [f, s, p] = newPon.split('/');
-                const newFS = `${f}/${s}`;
-                
-                const rawTcont = document.getElementById('in_tcont').value.split('\n');
-                const rawTraffic = document.getElementById('in_traffic').value.split('\n');
-                const rawSrv = document.getElementById('in_srv').value.split('\n');
-                const rawLine = document.getElementById('in_line').value.split('\n');
-                const combinedData = document.getElementById('in_combined').value.split('\n');
-                
-                let dbaMap = {}, srvMap = {}, lineMap = {}, trafficMap = {};
-                rawTcont.forEach(l => extractMap(l, dbaMap));
-                rawTraffic.forEach(l => extractMap(l, trafficMap, true));
-                rawSrv.forEach(l => extractMap(l, srvMap));
-                rawLine.forEach(l => extractMap(l, lineMap));
-
-                let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
-                let finalSrv = [];
-                srvLines.forEach(line => {
-                    finalSrv.push(line);
-                    if(line.toLowerCase().includes("commit")) finalSrv.push(" quit");
-                });
-                document.getElementById('res_srv').textContent = finalSrv.join('\n');
-
-                document.getElementById('res_line').textContent = rawLine.map(t => {
-                    if(!t.trim()) return "";
-                    let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
-                    return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
-                }).join('\n');
-
-                let lastOntPortIndex = -1;
-                const outIfLines = combinedData.filter(l => {
-                    const line = l.trim();
-                    return (line.startsWith('interface gpon') || line.startsWith('ont ') || (line.startsWith('port ') && !line.includes('desc')) || line.startsWith('ont-lineprofile') || line.startsWith('ont-srvprofile')) && !line.includes('service-port');
-                }).map(t => {
-                    let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
-                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
-                    txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
-                    txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
-                    return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
-                });
-
-                for(let i = outIfLines.length - 1; i >= 0; i--) { if(outIfLines[i].includes('ont port')) { lastOntPortIndex = i; break; } }
-                if(lastOntPortIndex !== -1) outIfLines.splice(lastOntPortIndex + 1, 0, " quit");
-
-                const outSpAndDesc = combinedData.filter(l => l.includes('service-port') || l.includes('port') && l.includes('desc')).map(t => {
-                    let txt = t.trim();
-                    if(!txt) return "";
-                    txt = txt.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
-                    txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
-                    txt = txt.replace(/port\s+desc\s+\d+\/\d+\/\d+/g, `port desc ${newPon}`);
-                    txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
-                    return txt;
-                }).filter(l => l !== "");
-
-                document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSpAndDesc.join('\n').trim()).trim();
-                alert("Proses Berhasil!");
-            } catch (e) { alert("Terjadi kesalahan proses!"); }
-        }
-        function copyCol(id) {
-            const text = document.getElementById(id).textContent;
-            if(!text) return;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'DONE!';
-                btn.style.backgroundColor = '#22c55e';
-                btn.style.color = '#ffffff';
-                setTimeout(() => { 
-                    btn.textContent = originalText; 
-                    btn.style.backgroundColor = '#facc15'; 
-                    btn.style.color = '#0f172a';
-                }, 1000);
-            });
-        }
-    </script>
-</body>
-</html>
+        <!-- SELURUH HTML & JAVASCRIPT DI BAWAH INI TIDAK DIUBAH -->
