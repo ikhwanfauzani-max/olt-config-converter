@@ -5,112 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .mono-font { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-weight: 700; }
+        .mono-font { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-weight: 600; }
         
+        /* JUDUL UTAMA: Ketebalan diturunkan ke Semibold */
+        .main-title { @apply text-xl font-semibold text-slate-900 uppercase tracking-wide; }
+        .section-title { @apply text-[15px] font-semibold uppercase tracking-wider; }
+
         /* Input Styling */
-        .column-text { @apply w-full text-[10px] leading-[1.3] outline-none p-2 transition-all mono-font; }
-        .column-label { @apply block text-[11px] font-black mb-1 text-slate-900 tracking-tight text-center uppercase; }
-        .border-heavy { @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; }
-        .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
+        .column-text { @apply w-full text-[10px] leading-[1.3] outline-none p-2 transition-all mono-font border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; }
+        .column-label { @apply block text-[11px] font-bold mb-1 text-slate-700 text-center uppercase; }
         
-        /* Output Card Styling */
-        .output-card { @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; }
-        
-        /* BAR JUDUL: ORANGE MUDA + TEKS HITAM EXTRA BOLD */
+        /* BAR OUTPUT: ORANGE KUNYIT (HIGH CONTRAST) */
         .output-header {
-            background-color: #fbbf24; /* Amber-400 */
-            @apply px-4 py-3 flex justify-between items-center border-b-2 border-slate-900;
+            background-color: #f59e0b; /* Amber-500 (Lebih tajam dari sebelumnya) */
+            @apply px-4 py-2 flex justify-between items-center border-b-2 border-slate-900;
         }
 
+        /* TEKS 01, 02, 03: HITAM PEKAT BOLD */
         .output-title {
             color: #000000 !important; 
-            @apply text-[13px] font-[900] tracking-tighter uppercase; /* Black Bold 900 */
-            text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.5);
+            @apply text-[12px] font-bold tracking-tight uppercase;
         }
 
-        /* TOMBOL COPY: KUNING + EFEK KLIK FISIK */
+        /* TOMBOL COPY: BIRU TERANG + EFEK FISIK */
         .btn-copy {
-            background-color: #fef08a; /* Kuning Terang */
-            @apply text-slate-900 text-[11px] px-5 py-1.5 font-[900] border-2 border-slate-900 transition-all uppercase;
-            box-shadow: 3px 3px 0px 0px #000000; /* Bayangan Tombol Tebal */
-            margin-left: 15px; /* Memberi jarak dari teks */
+            background-color: #0ea5e9; /* Sky-500 */
+            @apply text-white text-[10px] px-4 py-1 font-black border-2 border-slate-900 transition-all uppercase;
+            box-shadow: 2px 2px 0px 0px #000000;
+            margin-left: 10px;
         }
-        
-        /* Efek saat tombol ditekan */
         .btn-copy:active {
             box-shadow: 0px 0px 0px 0px #000000;
-            transform: translate(2px, 2px);
+            transform: translate(1px, 1px);
         }
+        .btn-copy:hover { @apply bg-sky-600; }
+
+        .output-card { @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; }
+        .result-area { @apply flex-grow overflow-both whitespace-pre p-3 text-slate-900 font-bold bg-white; font-family: 'Consolas', monospace; font-size: 11px; }
         
-        .btn-copy:hover { @apply bg-yellow-400; }
-
-        .result-area { 
-            @apply flex-grow overflow-both whitespace-pre p-3 text-slate-900 font-bold; 
-            background-color: #ffffff;
-            font-family: 'Consolas', monospace;
-            font-size: 11px;
-        }
-
-        .btn-clear-col { @apply mt-2 w-full text-[9px] font-black text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase; }
-        .reminder-box { background-color: #dbeafe; @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900; }
+        .reminder-box { background-color: #fefce8; @apply mb-6 border-l-8 border-amber-500 p-4 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; }
     </style>
 </head>
-<body class="bg-[#f0f2f5] p-4 md:p-8">
+<body class="bg-[#f8fafc] p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-start items-center mb-6 border-b-4 border-slate-900 pb-4 text-slate-900">
-            <h1 class="text-2xl font-[900]">Olt Huawei <span class="text-red-600">Rehoming Tools</span></h1>
+        
+        <div class="flex justify-between items-center mb-8 border-b-2 border-slate-300 pb-4">
+            <h1 class="main-title">Olt Huawei <span class="text-red-600">Rehoming Tools</span></h1>
+            <div class="text-[10px] font-bold text-slate-400">V.2.1 | HIGH CONTRAST MODE</div>
         </div>
 
         <div class="reminder-box">
-            <p class="text-sm font-bold text-blue-900">
-                ℹ️ REMINDER: <span class="underline uppercase">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi!
+            <p class="text-xs font-bold text-amber-900 italic">
+                ⚠️ REMINDER: PASTIKAN VLAN OLT BEFORE SUDAH DI CREATE DI OLT AFTER SEBELUM EKSEKUSI!
             </p>
         </div>
 
-        <div class="mb-4 text-red-600 font-black flex items-center gap-2">
-            <span class="text-xl">▼</span> <h2 class="text-lg uppercase">Input data dari Olt Before :</h2>
+        <div class="mb-4 flex items-center gap-2">
+            <div class="w-2 h-6 bg-red-600"></div>
+            <h2 class="section-title text-red-600">Input data dari Olt Before :</h2>
         </div>
 
-        <div class="grid grid-cols-6 gap-4 mb-8">
+        <div class="grid grid-cols-6 gap-4 mb-10">
             <div class="flex flex-col">
                 <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
+                <textarea id="in_tcont" class="column-text h-44 bg-white" placeholder="Paste dba-profile"></textarea>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="copas semua traffic table ip index OLT BEFORE"></textarea>
-                <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
+                <textarea id="in_traffic" class="column-text h-44 bg-white" placeholder="Paste traffic table"></textarea>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-srvprofile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
+                <textarea id="in_srv" class="column-text h-44 bg-white" placeholder="Paste ont-srvprofile"></textarea>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-lineprofile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
+                <textarea id="in_line" class="column-text h-44 bg-white" placeholder="Paste ont-lineprofile"></textarea>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-configuration port x/x/x" PON OLT BEFORE'></textarea>
-                <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
+                <textarea id="in_combined" class="column-text h-44 bg-white" placeholder='display current-conf port x/x/x'></textarea>
             </div>
             <div class="flex flex-col justify-end">
-                <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <label class="block text-[11px] font-[900] text-white mb-2 text-center">NEW PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-black text-[12px] border-2 border-slate-900 p-2 mb-3 text-center outline-none" placeholder="Contoh: 0/2/2">
-                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-[900] py-4 text-[13px] tracking-[0.2em] transition-all uppercase">Generate</button>
+                <div class="bg-slate-900 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,0.3)]">
+                    <label class="block text-[10px] font-bold text-white mb-2 text-center">NEW PON (F/S/P)</label>
+                    <input id="in_newpon" type="text" class="w-full font-black text-[12px] p-2 mb-3 text-center outline-none border-2 border-white" placeholder="0/2/2">
+                    <button onclick="processData()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 text-[11px] tracking-widest transition-all uppercase">Generate</button>
                 </div>
             </div>
         </div>
 
-        <div class="mb-4 text-slate-900 font-black flex items-center gap-2">
-            <span class="text-xl">▼</span> <h2 class="text-lg uppercase">Output data untuk Olt After :</h2>
+        <div class="mb-4 flex items-center gap-2">
+            <div class="w-2 h-6 bg-slate-900"></div>
+            <h2 class="section-title text-slate-900">Output data untuk Olt After :</h2>
         </div>
 
         <div class="grid grid-cols-3 gap-6">
@@ -139,7 +129,7 @@
     </div>
 
     <script>
-        function clearField(id) { document.getElementById(id).value = ''; }
+        // Logika script sama seperti sebelumnya (Stabil)
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -193,8 +183,8 @@
                     return txt;
                 }).filter(l => l !== "");
                 document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSpAndDesc.join('\n').trim()).trim();
-                alert("Proses Berhasil!");
-            } catch (e) { alert("Terjadi kesalahan proses!"); }
+                alert("Generator Berhasil!");
+            } catch (e) { alert("Kesalahan input!"); }
         }
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
@@ -202,14 +192,12 @@
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target;
                 const originalText = btn.textContent;
-                btn.textContent = 'DONE!';
+                btn.textContent = 'COPIED!';
                 btn.style.backgroundColor = '#22c55e';
-                btn.style.color = '#ffffff';
                 setTimeout(() => { 
                     btn.textContent = originalText; 
-                    btn.style.backgroundColor = '#fef08a'; 
-                    btn.style.color = '#0f172a';
-                }, 1000);
+                    btn.style.backgroundColor = '#0ea5e9'; 
+                }, 800);
             });
         }
     </script>
