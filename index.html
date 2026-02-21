@@ -5,35 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .column-text { 
-            font-family: 'JetBrains Mono', monospace;
-            @apply w-full text-[7px] leading-[1.2] outline-none p-2 transition-all font-bold; 
+        
+        /* Mengatur font input & output ke Consolas */
+        .mono-font { 
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: 500;
         }
+
+        .column-text { 
+            @apply w-full text-[10px] leading-[1.3] outline-none p-2 transition-all mono-font; 
+        }
+
         .column-label { 
             @apply block text-[11px] font-bold mb-1 uppercase text-slate-800 tracking-tight text-center; 
         }
+
         .border-heavy { 
             @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
         }
+
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
+
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
+
         .result-area { 
-            font-family: 'JetBrains Mono', monospace;
-            @apply flex-grow overflow-both whitespace-pre p-2 font-bold text-slate-900; 
+            @apply flex-grow overflow-both whitespace-pre p-2 text-slate-900 mono-font; 
             background-color: #e0f2fe; 
+            font-size: 10px;
         }
+
         .btn-clear-col {
             @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all uppercase;
         }
+
         .reminder-box {
             background-color: #dbeafe;
             @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900;
         }
+
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { @apply bg-slate-200; }
         ::-webkit-scrollbar-thumb { @apply bg-slate-900; }
@@ -68,34 +82,34 @@
         <div class="grid grid-cols-6 gap-4 mb-8">
             <div class="flex flex-col">
                 <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile yang ada di OLT BEFORE"></textarea>
+                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
                 <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas semua traffic table ip index yang ada di OLT BEFORE"></textarea>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table ip index OLT BEFORE"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-srvprofile yang ada di OLT BEFORE"></textarea>
+                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-srvprofile OLT BEFORE"></textarea>
                 <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-lineprofile yang ada di OLT BEFORE"></textarea>
+                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-lineprofile OLT BEFORE"></textarea>
                 <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas semua hasil dari "display current-configuration port x/x/x " pon OLT BEFORE'></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas hasil "display current-configuration port x/x/x " OLT BEFORE'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-mono text-[11px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
+                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
                 <div class="h-[34px]"></div>
@@ -132,6 +146,7 @@
     </div>
 
     <script>
+        // Logika script tetap menggunakan versi terakhir yang paling stabil
         function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
@@ -139,7 +154,6 @@
             let match;
             while ((match = regex.exec(text)) !== null) { mapObj[match[1]] = match[2]; }
         }
-
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
@@ -159,7 +173,6 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
-                // 01 & 02 Process (Sama)
                 let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
                 let finalSrv = [];
                 srvLines.forEach(line => {
@@ -174,18 +187,10 @@
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
 
-                // 03 Process (FIX DOUBLE)
                 let lastOntPortIndex = -1;
-                
-                // Filter 1: Hanya ambil baris konfigurasi interface (BUKAN port desc & service-port)
                 const outIfLines = combinedData.filter(l => {
                     const line = l.trim();
-                    return (line.startsWith('interface gpon') || 
-                            line.startsWith('ont ') || 
-                            (line.startsWith('port ') && !line.includes('desc')) || 
-                            line.startsWith('ont-lineprofile') || 
-                            line.startsWith('ont-srvprofile')) && 
-                           !line.includes('service-port');
+                    return (line.startsWith('interface gpon') || line.startsWith('ont ') || (line.startsWith('port ') && !line.includes('desc')) || line.startsWith('ont-lineprofile') || line.startsWith('ont-srvprofile')) && !line.includes('service-port');
                 }).map(t => {
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
                     txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
@@ -194,40 +199,23 @@
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 });
 
-                for(let i = outIfLines.length - 1; i >= 0; i--) {
-                    if(outIfLines[i].includes('ont port')) {
-                        lastOntPortIndex = i;
-                        break;
-                    }
-                }
+                for(let i = outIfLines.length - 1; i >= 0; i--) { if(outIfLines[i].includes('ont port')) { lastOntPortIndex = i; break; } }
                 if(lastOntPortIndex !== -1) outIfLines.splice(lastOntPortIndex + 1, 0, " quit");
 
-                // Filter 2: Proses baris port desc dan service-port
                 const outSpAndDesc = combinedData.filter(l => l.includes('service-port') || l.includes('port') && l.includes('desc')).map(t => {
                     let txt = t.trim();
                     if(!txt) return "";
-                    
-                    // Ganti Service-port
-                    txt = txt.replace(/service-port\s+\d+/g, 'service-port')
-                             .replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
-                    
-                    // Ganti Traffic Table
+                    txt = txt.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
-                    
-                    // Ganti Port Desc & Description kutip
                     txt = txt.replace(/port\s+desc\s+\d+\/\d+\/\d+/g, `port desc ${newPon}`);
                     txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
-                    
                     return txt;
                 }).filter(l => l !== "");
 
-                // Gabungkan tanpa double
                 document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSpAndDesc.join('\n').trim()).trim();
-
                 alert("Berhasil!");
             } catch (e) { alert("Error!"); }
         }
-
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
