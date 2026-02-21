@@ -95,7 +95,7 @@
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white uppercase mb-2 text-center">New PON (F/S/P)</label>
-                    <input id="in_newpon" type="text" class="w-full font-mono text-[11px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="Contoh: 0/2/6">
+                    <input id="in_newpon" type="text" class="w-full font-mono text-[11px] border-2 border-slate-900 p-2 mb-3 text-center font-bold focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
                     <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all uppercase text-[12px] tracking-widest">Generate</button>
                 </div>
                 <div class="h-[34px]"></div>
@@ -139,6 +139,7 @@
             let match;
             while ((match = regex.exec(text)) !== null) { mapObj[match[1]] = match[2]; }
         }
+
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
@@ -158,6 +159,7 @@
                 rawSrv.forEach(l => extractMap(l, srvMap));
                 rawLine.forEach(l => extractMap(l, lineMap));
 
+                // 01 & 02 Process (Sama)
                 let srvLines = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").filter(l => l !== "");
                 let finalSrv = [];
                 srvLines.forEach(line => {
@@ -172,9 +174,19 @@
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
 
+                // 03 Process (FIX DOUBLE)
                 let lastOntPortIndex = -1;
-                const outIfLines = combinedData.filter(l => (l.includes('interface gpon') || l.includes('ont ') || l.includes('port ') || l.includes('ont-lineprofile') || l.includes('ont-srvprofile')) && !l.includes('service-port')).map(t => {
-                    if(!t.trim()) return "";
+                
+                // Filter 1: Hanya ambil baris konfigurasi interface (BUKAN port desc & service-port)
+                const outIfLines = combinedData.filter(l => {
+                    const line = l.trim();
+                    return (line.startsWith('interface gpon') || 
+                            line.startsWith('ont ') || 
+                            (line.startsWith('port ') && !line.includes('desc')) || 
+                            line.startsWith('ont-lineprofile') || 
+                            line.startsWith('ont-srvprofile')) && 
+                           !line.includes('service-port');
+                }).map(t => {
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
                     txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
                     txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
@@ -190,34 +202,32 @@
                 }
                 if(lastOntPortIndex !== -1) outIfLines.splice(lastOntPortIndex + 1, 0, " quit");
 
-                // --- BAGIAN PERBAIKAN REGEX ---
-                const outSp = combinedData.filter(l => l.includes('service-port') || l.includes('port desc') || l.includes('port  desc')).map(t => {
-                    if(!t.trim()) return "";
+                // Filter 2: Proses baris port desc dan service-port
+                const outSpAndDesc = combinedData.filter(l => l.includes('service-port') || l.includes('port') && l.includes('desc')).map(t => {
+                    let txt = t.trim();
+                    if(!txt) return "";
                     
-                    let txt = t;
-                    
-                    // 1. Ganti service-port gpon
+                    // Ganti Service-port
                     txt = txt.replace(/service-port\s+\d+/g, 'service-port')
                              .replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
                     
-                    // 2. Ganti traffic table
+                    // Ganti Traffic Table
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
                     
-                    // 3. Ganti port desc (support spasi/tab berapapun)
-                    // Pola \s+ menangkap spasi/tab dalam jumlah berapapun
+                    // Ganti Port Desc & Description kutip
                     txt = txt.replace(/port\s+desc\s+\d+\/\d+\/\d+/g, `port desc ${newPon}`);
-                    
-                    // 4. Ganti angka di dalam tanda kutip description
                     txt = txt.replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                     
                     return txt;
-                }).join('\n');
+                }).filter(l => l !== "");
 
-                document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSp.trim()).trim();
+                // Gabungkan tanpa double
+                document.getElementById('res_merged').textContent = (outIfLines.join('\n').trim() + "\n\n" + outSpAndDesc.join('\n').trim()).trim();
 
                 alert("Berhasil!");
             } catch (e) { alert("Error!"); }
         }
+
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
