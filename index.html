@@ -80,6 +80,24 @@
     border-radius: 4px;
     border: 1px solid #2563eb;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-copy-custom:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-copy-custom.success {
+    background-color: #16a34a;
+    border-color: #15803d;
+    opacity: 0;
+    animation: fadeIn 0.25s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
         .result-area { 
