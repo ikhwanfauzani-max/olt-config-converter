@@ -7,12 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Mengatur font Calibri untuk teks umum */
+        /* Font Calibri untuk teks umum */
         body { 
             font-family: 'Calibri', 'Candara', 'Segoe UI', 'Optima', 'Arial', sans-serif; 
         }
         
-        /* Font khusus untuk area konfigurasi */
+        /* Font Consolas untuk area konfigurasi */
         .mono-font { 
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-weight: 500;
@@ -24,7 +24,6 @@
 
         .column-label { 
             @apply block text-[11px] font-bold mb-1 text-slate-800 tracking-tight text-center; 
-            /* Label tidak kapital lagi */
         }
 
         .border-heavy { 
@@ -35,6 +34,12 @@
 
         .output-card { 
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
+        }
+
+        /* Judul Kolom Output Biru Soft */
+        .output-header {
+            background-color: #3b82f6; /* Biru soft */
+            @apply px-3 py-2 flex justify-between items-center;
         }
 
         .result-area { 
@@ -126,23 +131,23 @@
 
         <div class="grid grid-cols-3 gap-6">
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-bold text-white tracking-wider">01. service profile</span>
-                    <button onclick="copyCol('res_srv')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">Copy</button>
+                <div class="output-header">
+                    <span class="text-[10px] font-bold text-white tracking-wider uppercase">01. output ont-srvprofile</span>
+                    <button onclick="copyCol('res_srv')" class="bg-white hover:bg-slate-100 text-blue-600 text-[9px] px-3 py-1 font-bold border border-blue-600 transition-all">Copy</button>
                 </div>
                 <div id="res_srv" class="result-area"></div>
             </div>
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-bold text-white tracking-wider">02. line profile</span>
-                    <button onclick="copyCol('res_line')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">Copy</button>
+                <div class="output-header">
+                    <span class="text-[10px] font-bold text-white tracking-wider uppercase">02. output ont-lineprofile</span>
+                    <button onclick="copyCol('res_line')" class="bg-white hover:bg-slate-100 text-blue-600 text-[9px] px-3 py-1 font-bold border border-blue-600 transition-all">Copy</button>
                 </div>
                 <div id="res_line" class="result-area"></div>
             </div>
             <div class="output-card">
-                <div class="flex justify-between items-center bg-slate-900 px-3 py-2">
-                    <span class="text-[10px] font-bold text-white tracking-wider">03. interface & service port</span>
-                    <button onclick="copyCol('res_merged')" class="bg-red-600 hover:bg-red-500 text-white text-[9px] px-3 py-1 font-bold border border-white transition-all">Copy</button>
+                <div class="output-header">
+                    <span class="text-[10px] font-bold text-white tracking-wider uppercase">03. output interface_gpon</span>
+                    <button onclick="copyCol('res_merged')" class="bg-white hover:bg-slate-100 text-blue-600 text-[9px] px-3 py-1 font-bold border border-blue-600 transition-all">Copy</button>
                 </div>
                 <div id="res_merged" class="result-area"></div>
             </div>
@@ -150,7 +155,6 @@
     </div>
 
     <script>
-        // Logika script tetap sama seperti sebelumnya
         function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
@@ -227,8 +231,13 @@
                 const btn = event.target;
                 const originalText = btn.textContent;
                 btn.textContent = 'Done!';
-                btn.classList.add('bg-green-600');
-                setTimeout(() => { btn.textContent = originalText; btn.classList.remove('bg-green-600'); }, 1000);
+                btn.style.backgroundColor = '#16a34a'; // Warna hijau saat sukses
+                btn.style.color = '#ffffff';
+                setTimeout(() => { 
+                    btn.textContent = originalText; 
+                    btn.style.backgroundColor = '#ffffff';
+                    btn.style.color = '#2563eb';
+                }, 1000);
             });
         }
     </script>
