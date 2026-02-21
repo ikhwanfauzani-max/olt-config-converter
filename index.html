@@ -6,30 +6,12 @@
     <title>Huawei OLT Rehoming - Blue Fill Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Tetap menggunakan font mono 6px untuk data OLT */
-        .column-text { 
-            @apply w-full font-mono text-[6px] leading-[1.1] outline-none p-2 transition-all;
-        }
-        
-        /* Label Judul: Biru Tua, Bold, 10px */
-        .column-label { 
-            @apply block text-[10px] font-bold mb-1 uppercase text-[#1e3a8a] tracking-wider text-center; 
-        }
-
-        /* Border Sharp Slate-500 */
-        .border-sharp { 
-            @apply border-2 border-slate-500 focus:border-blue-600 rounded-none shadow-sm; 
-        }
-
-        /* Fill warna biru sangat muda untuk area input agar lebih soft */
+        .column-text { @apply w-full font-mono text-[6px] leading-[1.1] outline-none p-2 transition-all; }
+        .column-label { @apply block text-[10px] font-bold mb-1 uppercase text-[#1e3a8a] tracking-wider text-center; }
+        .border-sharp { @apply border-2 border-slate-500 focus:border-blue-600 rounded-none shadow-sm; }
         .input-fill { @apply bg-[#f0f7ff] text-slate-900; }
-
-        /* Card Output */
         .output-card { @apply bg-white border-2 border-slate-500 flex flex-col min-h-[500px] shadow-md; }
-
-        .result-area { 
-            @apply flex-grow overflow-both whitespace-pre bg-white font-mono text-[6px] text-slate-800 p-2;
-        }
+        .result-area { @apply flex-grow overflow-both whitespace-pre bg-white font-mono text-[6px] text-slate-800 p-2; }
     </style>
 </head>
 <body class="bg-[#f2f6f8] p-6">
@@ -87,7 +69,6 @@
     </div>
 
     <script>
-        /* Logika inti pemetaan dari script python */
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
             const regex = isTraffic ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
@@ -117,32 +98,40 @@
                 rawLine.forEach(l => extractMap(l, lineMap));
 
                 document.getElementById('res_srv').textContent = rawSrv.map(t => t.trim() ? t.replace(/(ont-srvprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ') : "").join('\n');
+                
                 document.getElementById('res_line').textContent = rawLine.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/(ont-lineprofile gpon)\s+profile-id\s+\d+\s+/g, '$1 ');
                     return txt.replace(/dba-profile-id\s+(\d+)/g, (m, id) => `dba-profile-name ${dbaMap[id] || id}`);
                 }).join('\n');
+
                 document.getElementById('res_if').textContent = rawIf.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/interface gpon \d+\/\d+/g, `interface gpon ${newFS}`).replace(/\bport\s+\d+\b/g, `port ${p}`);
-                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config) \d+/g, `ont $1 ${p}`).replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
+                    
+                    // PERUBAHAN DI SINI: Menambahkan wan-config ke dalam daftar deteksi
+                    txt = txt.replace(/ont (add|ipconfig|tr069-server-config|wan-config) \d+/g, `ont $1 ${p}`);
+                    
+                    txt = txt.replace(/ont port ([a-z\-]+) \d+/g, `ont port $1 ${p}`);
                     txt = txt.replace(/\d+\/\d+\/\d+:/g, `${newPon}:`).replace(/ont-lineprofile-id\s+(\d+)/g, (m, id) => `ont-lineprofile-name ${lineMap[id] || id}`);
                     return txt.replace(/ont-srvprofile-id\s+(\d+)/g, (m, id) => `ont-srvprofile-name ${srvMap[id] || id}`);
                 }).join('\n');
+
                 document.getElementById('res_sp').textContent = rawSp.map(t => {
                     if(!t.trim()) return "";
                     let txt = t.replace(/service-port\s+\d+/g, 'service-port').replace(/gpon\s+\d+\/\d+\/\d+/g, `gpon ${newPon}`);
                     txt = txt.replace(/traffic-table index\s+(\d+)/g, (m, id) => `traffic-table name ${trafficMap[id] || id}`);
                     return txt.replace(/port desc \d+\/\d+\/\d+/g, `port desc ${newPon}`).replace(/description\s+"(\d+\/\d+\/\d+)_/g, `description "${newPon}_`);
                 }).join('\n');
-                alert("Berhasil!");
-            } catch (e) { alert("Error!"); }
+
+                alert("Berhasil dikonversi!");
+            } catch (e) { alert("Terjadi kesalahan teknis!"); }
         }
 
         function copyCol(id) {
             const text = document.getElementById(id).textContent;
             if(!text) return;
-            navigator.clipboard.writeText(text).then(() => alert("Copied!"));
+            navigator.clipboard.writeText(text).then(() => alert("Berhasil disalin ke clipboard!"));
         }
     </script>
 </body>
