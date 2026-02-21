@@ -10,22 +10,19 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .mono-font { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-weight: 500; }
         
-        /* Input Styling */
         .column-text { @apply w-full text-[10px] leading-[1.3] outline-none p-2 transition-all mono-font; }
         .column-label { @apply block text-[11px] font-bold mb-1 text-slate-800 tracking-tight text-center; }
         .border-heavy { @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; }
         .input-fill { @apply bg-white text-slate-900 focus:bg-red-50; }
         
-        /* Output Styling */
         .output-card { @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; }
         
-        /* HEADER OUTPUT: BIRU TUA SOLID */
+        /* HEADER OUTPUT: BIRU TUA SOLID & TEKS PUTIH BOLD */
         .output-header {
-            background-color: #1e3a8a !important; /* Blue-900 / Biru Tua */
+            background-color: #1e3a8a !important; 
             @apply px-3 py-2 flex justify-between items-center border-b-2 border-slate-900;
         }
 
-        /* TEKS JUDUL: PUTIH BERSIH & BOLD */
         .output-title {
             color: #ffffff !important; 
             @apply text-[11px] font-black tracking-tight;
@@ -38,12 +35,10 @@
             font-size: 10px;
         }
 
-        /* TOMBOL COPY KUNING STABILO */
         .btn-copy {
             background-color: #facc15 !important; 
             @apply text-slate-900 text-[10px] px-3 py-1 font-black border-2 border-slate-900 transition-all shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] uppercase;
         }
-        .btn-copy:hover { @apply bg-yellow-500; }
 
         .btn-clear-col { @apply mt-2 w-full text-[9px] font-bold text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-300 hover:border-slate-900 py-1 transition-all; }
         .reminder-box { background-color: #dbeafe; @apply mb-6 border-l-8 border-blue-600 p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-slate-900; }
@@ -65,52 +60,54 @@
         </div>
 
         <div class="reminder-box">
-            <p class="text-sm font-semibold text-blue-900">
-                Reminder: <span class="text-blue-700 font-bold underline">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi!
+            <p class="text-sm font-semibold text-blue-900 italic">
+                ℹ️ Reminder: <span class="text-blue-700 font-bold underline uppercase">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi!
             </p>
         </div>
 
         <div class="mb-4">
-            <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3">Input data dari Olt Before :</h2>
+            <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3 uppercase">Input data dari Olt Before :</h2>
         </div>
+
         <div class="grid grid-cols-6 gap-4 mb-8">
             <div class="flex flex-col">
                 <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas dba-profile"></textarea>
+                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
                 <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table"></textarea>
+                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas traffic table OLT BEFORE"></textarea>
                 <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas srv-profile"></textarea>
+                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-srvprofile OLT BEFORE"></textarea>
                 <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas line-profile"></textarea>
+                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas ont-lineprofile OLT BEFORE"></textarea>
                 <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col">
                 <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder="Copas current-config"></textarea>
+                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas "display current-config" OLT BEFORE'></textarea>
                 <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
             </div>
             <div class="flex flex-col justify-end">
                 <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
-                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center outline-none" placeholder="0/1/7">
-                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 text-[12px]">Generate</button>
+                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center outline-none" placeholder="Contoh: 0/1/7">
+                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 text-[12px] tracking-widest transition-all">GENERATE</button>
                 </div>
             </div>
         </div>
 
         <div class="mb-4">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3">Output data untuk Olt After :</h2>
+            <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3 uppercase">Output data untuk Olt After :</h2>
         </div>
+
         <div class="grid grid-cols-3 gap-6">
             <div class="output-card">
                 <div class="output-header">
@@ -137,6 +134,7 @@
     </div>
 
     <script>
+        // Logika script tetap sama (Stable Version)
         function clearField(id) { document.getElementById(id).value = ''; }
         function extractMap(text, mapObj, isTraffic = false) {
             if (!text) return;
