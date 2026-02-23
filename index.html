@@ -160,14 +160,25 @@
             </div>
         </div>
 
-        <div class="reminder-box">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">ℹ️</span>
-                <p class="text-sm font-semibold text-blue-900 tracking-tight">
-                    Reminder: <span class="text-blue-700 font-bold underline">Pastikan VLAN OLT BEFORE sudah di create di OLT AFTER</span> sebelum eksekusi konfigurasi ini!
-                </p>
-            </div>
+      <div class="reminder-box">
+    <div class="flex gap-3">
+        <span class="text-2xl mt-1">ℹ️</span>
+        <div class="text-sm font-semibold text-blue-900 tracking-tight">
+            <p class="font-bold text-blue-800 mb-2">Reminder:</p>
+            <ol class="list-decimal ml-5 space-y-1">
+                <li>
+                    Pastikan <span class="font-bold underline text-blue-700">VLAN OLT BEFORE</span> 
+                    sudah di create di <span class="font-bold underline text-blue-700">OLT AFTER</span>
+                </li>
+                <li>
+                    Untuk Bandwidth dengan angka anti mainstream (contoh: <span class="font-bold">105M</span>), 
+                    mohon dibuat terlebih dahulu <span class="font-bold">dba-profile</span> 
+                    dan <span class="font-bold">traffic profile</span> di OLT BARU
+                </li>
+            </ol>
         </div>
+    </div>
+</div>
 
         <div class="mb-4">
             <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3">Input data dari Olt Before :</h2>
