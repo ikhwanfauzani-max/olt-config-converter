@@ -5,43 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OLT Huawei Rehoming PON Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Library untuk membaca Excel di sisi Client (Browser) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Font Calibri untuk teks umum */
         body { 
             font-family: 'Segoe UI', sans-serif;
         }
         
-        /* Font Consolas untuk area konfigurasi */
         .mono-font { 
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
             font-weight: 500;
         }
 
         .column-text { 
-    width: 100%;
-    font-size: 10px;
-    line-height: 1.3;
-    padding: 8px;
-    outline: none;
-    transition: all 0.2s ease;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-weight: 500;
+            width: 100%;
+            font-size: 10px;
+            line-height: 1.3;
+            padding: 8px;
+            outline: none;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: 500;
         }
 
         .column-label { 
-    display: block;
-    font-size: 14px;          /* Dinaikkan */
-    font-weight: 700;         /* Sama seperti font-bold */
-    text-align: center;
-    margin-bottom: 6px;
-    color: #1e293b;
-
-    background-color: #efe1cf;  /* Coklat muda */
-    padding: 6px 8px;
-    border-left: 4px solid #a16207;  /* Aksen seperti h2 */
-    border-radius: 4px;
-}
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #1e293b;
+            background-color: #efe1cf;
+            padding: 6px 8px;
+            border-left: 4px solid #a16207;
+            border-radius: 4px;
+        }
 
         .border-heavy { 
             @apply border-2 border-slate-900 focus:border-red-600 focus:ring-2 focus:ring-red-100 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]; 
@@ -53,88 +52,82 @@
             @apply bg-white border-2 border-slate-900 flex flex-col min-h-[500px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]; 
         }
 
-        /* Judul Kolom Output Biru Soft */
+        .output-header {
+            background-color: rgba(59,130,246,0.15);
+            padding: 6px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #3b82f6;
+            border-bottom: 1px solid #93c5fd;
+        }
 
-.output-header {
-    background-color: rgba(59,130,246,0.15);
-    padding: 6px 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-left: 4px solid #3b82f6;
-    border-bottom: 1px solid #93c5fd;
-}
+        .output-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
 
-.output-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1e3a8a;
-}
+        .btn-copy-custom {
+            background-color: #3b82f6;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #2563eb;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.btn-copy-custom {
-    background-color: #3b82f6;
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid #2563eb;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        .btn-copy-custom:hover {
+            background-color: #2563eb;
+            transform: translateY(-1px);
+        }
 
-.btn-copy-custom:hover {
-    background-color: #2563eb;
-    transform: translateY(-1px);
-}
+        .btn-copy-custom.success {
+            background-color: #16a34a;
+            border-color: #15803d;
+            opacity: 0;
+            animation: fadeIn 0.25s forwards;
+        }
 
-.btn-copy-custom.success {
-    background-color: #16a34a;
-    border-color: #15803d;
-    opacity: 0;
-    animation: fadeIn 0.25s forwards;
-}
-            .btn-clear-col {
-    margin-top: 6px;
-    width: 100%;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 5px;
-    border-radius: 4px;
-    border: 1px solid #475569;
-    background-color: #e2e8f0;
-    color: #1e293b;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        .btn-clear-col {
+            margin-top: 6px;
+            width: 100%;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #475569;
+            background-color: #e2e8f0;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.btn-clear-col:hover {
-    background-color: #cbd5e1;
-    transform: translateY(-1px);
-}
+        .btn-clear-col:hover {
+            background-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
 
-.btn-clear-col.success {
-    background-color: #dc2626;
-    border-color: #991b1b;
-    color: white;
-    opacity: 0;
-    animation: fadeIn 0.25s forwards;
-}
-            
+        .btn-clear-col.success {
+            background-color: #dc2626;
+            border-color: #991b1b;
+            color: white;
+            opacity: 0;
+            animation: fadeIn 0.25s forwards;
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
         .result-area { 
             @apply flex-grow overflow-both whitespace-pre p-2 text-slate-900 mono-font; 
             background-color: #e0f2fe; 
             font-size: 10px;
-        }
-
-        .btn-clear-col {
-            @apply mt-2 w-full text-[9px] font-bold text-slate-500 hover:text-white hover:bg-slate-800 border border-slate-400 hover:border-slate-900 py-1 transition-all;
         }
 
         .reminder-box {
@@ -149,149 +142,205 @@
 </head>
 <body class="bg-[#f0f2f5] p-4 md:p-8">
     <div class="max-w-[100%] mx-auto">
-        <div class="flex justify-start items-center mb-6 border-b-4 border-slate-900 pb-4">
+        
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-6 border-b-4 border-slate-900 pb-4">
             <div class="flex items-center gap-4">
                 <div class="border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white overflow-hidden">
-                    <img src="logo.jpg" alt="Huawei Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
+                    <img src="logo.jpg" alt="Logo" class="w-[60px] h-[60px] object-cover" onerror="this.src='https://via.placeholder.com/60?text=LOGO'">
                 </div>
                 <div class="text-left">
-                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none">Olt Huawei <span class="text-red-600">Rehoming Tools</span></h1>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none">Olt Config <span class="text-red-600">Converter Tools</span></h1>
+                </div>
+            </div>
+
+            <!-- TAB NAVIGATION -->
+            <div class="flex gap-2 border-2 border-slate-900 p-1 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <button id="tab-huawei" onclick="switchTab('huawei')" class="px-4 py-2 text-xs font-bold bg-slate-950 text-white transition-all">
+                    Huawei to Huawei
+                </button>
+                <button id="tab-zte" onclick="switchTab('zte')" class="px-4 py-2 text-xs font-bold bg-slate-200 text-slate-800 hover:bg-slate-300 transition-all">
+                    Huawei to ZTE (Excel)
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- PANELS 1: HUAWEI TO HUAWEI (FITUR LAMA KAMU) -->
+        <!-- ========================================== -->
+        <div id="panel-huawei">
+            <div class="reminder-box">
+                <div class="flex gap-3">
+                    <span class="text-2xl mt-1">ℹ️</span>
+                    <div class="text-sm font-semibold text-blue-900 tracking-tight">
+                        <p class="font-bold text-blue-800 mb-2">Reminder:</p>
+                        <ol class="list-decimal ml-5 space-y-1">
+                            <li>Pastikan <span class="font-bold underline text-blue-700">VLAN OLT BEFORE</span> sudah di create di <span class="font-bold underline text-blue-700">OLT AFTER</span></li>
+                            <li>Untuk Bandwidth dengan angka anti mainstream (contoh: <span class="font-bold">105M</span>), mohon dibuat terlebih dahulu <span class="font-bold">dba-profile</span> dan <span class="font-bold">traffic profile</span> di OLT BARU</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3">Input data dari Olt Before :</h2>
+            </div>
+
+            <div class="grid grid-cols-6 gap-4 mb-8">
+                <div class="flex flex-col">
+                    <label class="column-label">01. dba-profile</label>
+                    <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
+                    <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
+                </div>
+                <div class="flex flex-col">
+                    <label class="column-label">02. traffic_table</label>
+                    <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas semua traffic table ip index OLT BEFORE"></textarea>
+                    <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
+                </div>
+                <div class="flex flex-col">
+                    <label class="column-label">03. ont-srvprofile</label>
+                    <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-srvprofile OLT BEFORE"></textarea>
+                    <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
+                </div>
+                <div class="flex flex-col">
+                    <label class="column-label">04. ont-lineprofile</label>
+                    <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-lineprofile OLT BEFORE"></textarea>
+                    <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
+                </div>
+                <div class="flex flex-col">
+                    <label class="column-label">05. interface_gpon</label>
+                    <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas hasil "display current-configuration port x/x/x " OLT BEFORE'></textarea>
+                    <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
+                </div>
+                
+                <div class="flex flex-col justify-end">
+                    <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
+                        <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
+                        <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all text-[12px] tracking-widest">Generate</button>
+                    </div>
+                    <div class="h-[34px]"></div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3">Output data untuk Olt After :</h2>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6">
+                <div class="output-card">
+                    <div class="output-header">
+                        <span class="output-title">01. output ont-srvprofile</span>
+                        <button onclick="copyCol('res_srv')" class="btn-copy-custom">COPY</button>
+                    </div>
+                    <div id="res_srv" class="result-area"></div>
+                </div>
+                <div class="output-card">
+                    <div class="output-header">
+                        <span class="output-title">02. output ont-lineprofile</span>
+                        <button onclick="copyCol('res_line')" class="btn-copy-custom">COPY</button>
+                    </div>
+                    <div id="res_line" class="result-area"></div>
+                </div>
+                <div class="output-card">
+                    <div class="output-header">
+                        <span class="output-title">03. output interface_gpon</span>
+                        <button onclick="copyCol('res_merged')" class="btn-copy-custom">COPY</button>
+                    </div>
+                    <div id="res_merged" class="result-area"></div>
                 </div>
             </div>
         </div>
 
-      <div class="reminder-box">
-    <div class="flex gap-3">
-        <span class="text-2xl mt-1">ℹ️</span>
-        <div class="text-sm font-semibold text-blue-900 tracking-tight">
-            <p class="font-bold text-blue-800 mb-2">Reminder:</p>
-            <ol class="list-decimal ml-5 space-y-1">
-                <li>
-                    Pastikan <span class="font-bold underline text-blue-700">VLAN OLT BEFORE</span> 
-                    sudah di create di <span class="font-bold underline text-blue-700">OLT AFTER</span>
-                </li>
-                <li>
-                    Untuk Bandwidth dengan angka anti mainstream (contoh: <span class="font-bold">105M</span>), 
-                    mohon dibuat terlebih dahulu <span class="font-bold">dba-profile</span> 
-                    dan <span class="font-bold">traffic profile</span> di OLT BARU
-                </li>
-            </ol>
-        </div>
-    </div>
-</div>
-
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-red-600 tracking-tight border-l-4 border-red-600 pl-3">Input data dari Olt Before :</h2>
-        </div>
-
-        <div class="grid grid-cols-6 gap-4 mb-8">
-            <div class="flex flex-col">
-                <label class="column-label">01. dba-profile</label>
-                <textarea id="in_tcont" class="column-text border-heavy input-fill h-48" placeholder="Copas semua dba-profile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_tcont')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">02. traffic_table</label>
-                <textarea id="in_traffic" class="column-text border-heavy input-fill h-48" placeholder="Copas semua traffic table ip index OLT BEFORE"></textarea>
-                <button onclick="clearField('in_traffic')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">03. ont-srvprofile</label>
-                <textarea id="in_srv" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-srvprofile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_srv')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">04. ont-lineprofile</label>
-                <textarea id="in_line" class="column-text border-heavy input-fill h-48" placeholder="Copas semua ont-lineprofile OLT BEFORE"></textarea>
-                <button onclick="clearField('in_line')" class="btn-clear-col">Clear</button>
-            </div>
-            <div class="flex flex-col">
-                <label class="column-label">05. interface_gpon</label>
-                <textarea id="in_combined" class="column-text border-heavy input-fill h-48" placeholder='Copas hasil "display current-configuration port x/x/x " OLT BEFORE'></textarea>
-                <button onclick="clearField('in_combined')" class="btn-clear-col">Clear</button>
-            </div>
-            
-            <div class="flex flex-col justify-end">
-                <div class="bg-red-600 p-4 border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <label class="block text-[10px] font-bold text-white mb-2 text-center">New PON (f/s/p)</label>
-                    <input id="in_newpon" type="text" class="w-full mono-font text-[11px] border-2 border-slate-900 p-2 mb-3 text-center focus:bg-white outline-none" placeholder="Contoh: 0/1/7">
-                    <button onclick="processData()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 shadow-md transition-all text-[12px] tracking-widest">Generate</button>
+        <!-- ========================================== -->
+        <!-- PANELS 2: HUAWEI TO ZTE (FITUR BARU) -->
+        <!-- ========================================== -->
+        <div id="panel-zte" class="hidden">
+            <div class="reminder-box bg-emerald-50 border-emerald-600">
+                <div class="flex gap-3">
+                    <span class="text-2xl mt-1">📊</span>
+                    <div class="text-sm font-semibold text-emerald-900 tracking-tight">
+                        <p class="font-bold text-emerald-800 mb-2">Petunjuk Ekspor Kupon ZTE:</p>
+                        <ul class="list-disc ml-5 space-y-1">
+                            <li>Upload file Excel hasil query NMS Huawei (<span class="font-bold">ONU_VLAN.xlsx</span>).</li>
+                            <li>Pastikan nama kolom sesuai: <span class="mono-font font-bold">Frame ID, Slot ID, Port ID, ONU ID, User Label, SN/MAC, Terminal Type, GEMPORT ID, User Vlan, Upstream Traffic Info, Downstream Traffic Info, ONU Alias</span>.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="h-[34px]"></div>
+            </div>
+
+            <div class="bg-white border-2 border-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6 flex flex-col items-center justify-center border-dashed border-4 border-slate-400">
+                <label class="block text-sm font-bold text-slate-800 mb-3">Upload File Excel NMS Huawei</label>
+                <input type="file" id="excel-file" accept=".xlsx, .xls" class="block w-full max-w-md text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-none file:border-2 file:border-slate-900 file:text-xs file:font-bold file:bg-amber-100 file:text-slate-900 hover:file:bg-amber-200 cursor-pointer" />
+                <button onclick="processZteExcel()" class="mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-8 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs tracking-wider transition-all">PROSES KONVERSI ZTE</button>
+            </div>
+
+            <div class="mb-4 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3">Output Hasil Konfigurasi OLT ZTE :</h2>
+                <button onclick="downloadZteTxt()" id="btn-download-zte" class="hidden bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-2 px-4 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">📥 DOWNLOAD .TXT FILE</button>
+            </div>
+
+            <div class="output-card min-h-[600px]">
+                <div class="output-header bg-emerald-100 border-emerald-600">
+                    <span class="output-title text-emerald-900">Script Preview Konfigurasi ZTE</span>
+                    <button onclick="copyCol('res_zte')" class="btn-copy-custom bg-emerald-600 border-emerald-700 hover:bg-emerald-700">COPY ALL</button>
+                </div>
+                <div id="res_zte" class="result-area bg-emerald-50 overflow-auto max-h-[600px]"></div>
             </div>
         </div>
 
-        <div class="mb-4">
-            <h2 class="text-lg font-bold text-slate-900 tracking-tight border-l-4 border-slate-900 pl-3">Output data untuk Olt After :</h2>
-        </div>
-
-       <div class="grid grid-cols-3 gap-6">
-
-    <div class="output-card">
-        <div class="output-header">
-            <span class="output-title">
-                01. output ont-srvprofile
-            </span>
-            <button onclick="copyCol('res_srv')" class="btn-copy-custom">
-                COPY
-            </button>
-        </div>
-        <div id="res_srv" class="result-area"></div>
     </div>
 
-    <div class="output-card">
-        <div class="output-header">
-            <span class="output-title">
-                02. output ont-lineprofile
-            </span>
-            <button onclick="copyCol('res_line')" class="btn-copy-custom">
-                COPY
-            </button>
-        </div>
-        <div id="res_line" class="result-area"></div>
-    </div>
-
-    <div class="output-card">
-        <div class="output-header">
-            <span class="output-title">
-                03. output interface_gpon
-            </span>
-            <button onclick="copyCol('res_merged')" class="btn-copy-custom">
-                COPY
-            </button>
-        </div>
-        <div id="res_merged" class="result-area"></div>
-    </div>
-
-</div>
-
+    <!-- LOGIKA JAVASCRIPT INTEGRASI -->
     <script>
+        // --- LOGIKA TAB SWITCHING (AGAR FITUR LAMA AMAN) ---
+        function switchTab(target) {
+            const tabHuawei = document.getElementById('tab-huawei');
+            const tabZte = document.getElementById('tab-zte');
+            const panelHuawei = document.getElementById('panel-huawei');
+            const panelZte = document.getElementById('panel-zte');
+
+            if(target === 'huawei') {
+                tabHuawei.className = "px-4 py-2 text-xs font-bold bg-slate-950 text-white transition-all";
+                tabZte.className = "px-4 py-2 text-xs font-bold bg-slate-200 text-slate-800 hover:bg-slate-300 transition-all";
+                panelHuawei.classList.remove('hidden');
+                panelZte.classList.add('hidden');
+            } else {
+                tabZte.className = "px-4 py-2 text-xs font-bold bg-slate-950 text-white transition-all";
+                tabHuawei.className = "px-4 py-2 text-xs font-bold bg-slate-200 text-slate-800 hover:bg-slate-300 transition-all";
+                panelZte.classList.remove('hidden');
+                panelHuawei.classList.add('hidden');
+            }
+        }
+
+        // --- GLOBAL VARIABLES UNTUK DOWNLOAD FILE ---
+        let globalZteConfigText = "";
+
+        // --- FITUR EKSISTING (HUAWEI TO HUAWEI) ---
         function clearField(id) {
-    const textarea = document.getElementById(id);
-    const btn = event.target;
+            const textarea = document.getElementById(id);
+            textarea.value = "";
+            const btn = event.target;
+            btn.classList.add('success');
+            const originalText = btn.textContent;
+            btn.textContent = "CLEARED ✓";
+            setTimeout(() => {
+                btn.classList.remove('success');
+                btn.textContent = originalText;
+            }, 1000);
+        }
 
-    textarea.value = "";
-
-    btn.classList.add('success');
-    const originalText = btn.textContent;
-    btn.textContent = "CLEARED ✓";
-
-    setTimeout(() => {
-        btn.classList.remove('success');
-        btn.textContent = originalText;
-    }, 1000);
-}
         function extractMap(text, mapObj, isTraffic = false) {
-    if (!text) return;
-    const regex = isTraffic 
-        ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g
-        : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
+            if (!text) return;
+            const regex = isTraffic 
+                ? /ip index\s+(\d+).*?name\s+"([^"]+)"/g
+                : /profile-id\s+(\d+).*?profile-name\s+"([^"]+)"/g;
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                mapObj[match[1]] = match[2];
+            }
+        }
 
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-        mapObj[match[1]] = match[2];
-    }
-}
         function processData() {
             try {
                 const newPon = document.getElementById('in_newpon').value.trim();
@@ -354,23 +403,222 @@
                 alert("Proses Berhasil!");
             } catch (e) { alert("Terjadi kesalahan proses!"); }
         }
-  function copyCol(id) {
-    const text = document.getElementById(id).textContent;
-    if(!text) return;
 
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = event.target;
-        const originalText = btn.textContent;
+        // --- FITUR BARU (PORTING LOGIKA PYTHON KE JAVASCRIPT) ---
+        const typeMapping = {
+            "F679DV9.2": "ZTEG-F679D",
+            "F670LV9.0": "ZTEG-F670L",
+            "F609V10.0": "ZTEG-F609",
+            "F609V5.3": "ZTEG-F609",
+            "F609V5.2": "ZTEG-F609",
+            "F609V9.0": "ZTEG-F609"
+        };
 
-        btn.classList.add('success');
-        btn.textContent = 'COPIED ✓';
+        function cleanDescription(label) {
+            if (!label) return "";
+            return String(label).replace(/^\d+\/\d+\/\d+[\s_]*/, "").trim();
+        }
 
-        setTimeout(() => {
-            btn.classList.remove('success');
-            btn.textContent = originalText;
-        }, 1000);
-    });
-}
+        function processZteExcel() {
+            const fileInput = document.getElementById('excel-file');
+            if (fileInput.files.length === 0) return alert("Silakan pilih file Excel terlebih dahulu!");
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // Mengubah baris excel menjadi JSON array of objects
+                    let rows = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    if(rows.length === 0) return alert("File Excel kosong!");
+
+                    // Transformasi koordinat & Mapping Data (+1 untuk Frame, Port, ONU ID)
+                    rows.forEach(row => {
+                        row.ZTE_Frame = parseInt(row['Frame ID'] || 0) + 1;
+                        row.ZTE_Slot = parseInt(row['Slot ID'] || 0);
+                        row.ZTE_Port = parseInt(row['Port ID'] || 0) + 1;
+                        row.ZTE_ONU_ID = parseInt(row['ONU ID'] || 0) + 1;
+                        row.GEMPORT_ID = parseInt(row['GEMPORT ID'] || 0);
+                        row.User_Vlan = parseInt(row['User Vlan'] || 0);
+                    });
+
+                    // Sorting Multi-kolom: Frame -> Slot -> Port -> ONU ID -> Gemport ID
+                    rows.sort((a, b) => {
+                        return a.ZTE_Frame - b.ZTE_Frame || 
+                               a.ZTE_Slot - b.ZTE_Slot || 
+                               a.ZTE_Port - b.ZTE_Port || 
+                               a.ZTE_ONU_ID - b.ZTE_ONU_ID || 
+                               a.GEMPORT_ID - b.GEMPORT_ID;
+                    });
+
+                    let configLines = [];
+
+                    // --- TAHAP 1: INTERFACE GPON OLT REGISTRATION ---
+                    configLines.push("! ========================================================");
+                    configLines.push("! TAHAP 1: INTERFACE GPON OLT REGISTRATION");
+                    configLines.push("! ========================================================\n");
+
+                    // Grouping manual berdasarkan Port OLT (Frame/Slot/Port)
+                    let oltGroups = {};
+                    rows.forEach(r => {
+                        let key = `${r.ZTE_Frame}/${r.ZTE_Slot}/${r.ZTE_Port}`;
+                        if(!oltGroups[key]) oltGroups[key] = [];
+                        oltGroups[key].push(r);
+                    });
+
+                    for (let key in oltGroups) {
+                        let group = oltGroups[key];
+                        let firstRow = group[0];
+                        let [frame, slot, port] = key.split('/');
+                        let descCleaned = cleanDescription(firstRow['User Label']);
+                        
+                        configLines.push(`interface gpon_olt-${key}`);
+                        configLines.push(`  description ${key} ${descCleaned}`);
+                        configLines.push(`  no shutdown`);
+
+                        // Ambil ONU unik di port ini
+                        let seenOnu = new Set();
+                        group.forEach(row => {
+                            if(!seenOnu.has(row.ZTE_ONU_ID)) {
+                                seenOnu.add(row.ZTE_ONU_ID);
+                                let sn = String(row['SN/MAC'] || "").trim();
+                                if(sn.startsWith("5A544547")) {
+                                    sn = sn.replace("5A544547", "ZTEG");
+                                }
+                                let rawType = String(row['Terminal Type'] || "").trim();
+                                let onuType = typeMapping[rawType] || `ZTEG-${rawType}`;
+                                
+                                configLines.push(`  onu ${row.ZTE_ONU_ID} type ${onuType} sn ${sn}`);
+                            }
+                        });
+                        configLines.push(`  exit\n`);
+                    }
+
+                    // --- TAHAP 2: DETAIL ONU CONFIGURATION & VPORT ---
+                    configLines.push("! ========================================================");
+                    configLines.push("! TAHAP 2: DETAIL ONU CONFIGURATION & VPORT");
+                    configLines.push("! ========================================================\n");
+
+                    // Grouping manual berdasarkan ONU Unik
+                    let onuGroups = {};
+                    rows.forEach(r => {
+                        let key = `${r.ZTE_Frame}/${r.ZTE_Slot}/${r.ZTE_Port}:${r.ZTE_ONU_ID}`;
+                        if(!onuGroups[key]) onuGroups[key] = [];
+                        onuGroups[key].push(r);
+                    });
+
+                    for (let key in onuGroups) {
+                        let group = onuGroups[key];
+                        let firstRow = group[0];
+                        let [fsp, onuId] = key.split(':');
+                        let onuAlias = String(firstRow['ONU Alias'] || "").trim();
+                        let rawType = String(firstRow['Terminal Type'] || "").trim();
+                        let onuType = typeMapping[rawType] || `ZTEG-${rawType}`;
+
+                        // Ambil deskripsi utama tcont 1
+                        let tcont1Row = group.find(r => r.GEMPORT_ID === 1);
+                        let mainDesc = tcont1Row ? String(tcont1Row['Upstream Traffic Info'] || "").trim() : String(firstRow['Upstream Traffic Info'] || "").trim();
+
+                        // 1. Block gpon_onu
+                        configLines.push(`interface gpon_onu-${key}`);
+                        configLines.push(`  name ${onuAlias}`);
+                        configLines.push(`  description ${mainDesc}`);
+                        
+                        // Isi tcont & gemport (unik per baris data)
+                        group.forEach(row => {
+                            let upProfile = String(row['Upstream Traffic Info'] || "").trim();
+                            configLines.push(`  tcont ${row.GEMPORT_ID} profile ${upProfile}`);
+                            configLines.push(`  gemport ${row.GEMPORT_ID} tcont ${row.GEMPORT_ID}`);
+                        });
+                        configLines.push(`$\n`);
+
+                        // 2. Block pon-onu-mng
+                        configLines.push(`pon-onu-mng gpon_onu-${key}`);
+                        if(onuType === "ZTEG-F679D") {
+                            configLines.push(`  dhcp-ip ethuni eth_0/1 from-onu`);
+                            configLines.push(`  dhcp-ip ethuni eth_0/2 from-onu`);
+                        } else {
+                            configLines.push(`  dhcp-ip ethuni eth_0/1 from-onu`);
+                            configLines.push(`  dhcp-ip ethuni eth_0/2 from-onu`);
+                            configLines.push(`  dhcp-ip ethuni eth_0/3 from-onu`);
+                            configLines.push(`  dhcp-ip ethuni eth_0/4 from-onu`);
+                        }
+                        configLines.push(`  security-mgmt 3 state enable mode forward protocol web`);
+
+                        let acsVlan = 60;
+                        group.forEach(row => {
+                            configLines.push(`  service ${row.GEMPORT_ID} gemport ${row.GEMPORT_ID} vlan ${row.User_Vlan}`);
+                            if(row.GEMPORT_ID === 3) {
+                                acsVlan = row.User_Vlan;
+                            }
+                        });
+                        configLines.push(`  veip 1 port 10301 ipv4 host 2`);
+                        configLines.push(`  wan-ip 3 ipv4 mode dhcp vlan-profile wan${acsVlan} host 2`);
+                        configLines.push(`  tr069-mgmt 1 acs http://acs.fiberstar.co.id:10301/onu/tr069 validate basic username onu-fs password F1b3r*-onu`);
+                        configLines.push(`$\n`);
+
+                        // 3. Block vport
+                        group.forEach(row => {
+                            let downProfile = String(row['Downstream Traffic Info'] || "").trim();
+                            let upProfile = String(row['Upstream Traffic Info'] || "").trim();
+                            let [frame, slot, port] = fsp.split('/');
+
+                            configLines.push(`interface vport-${frame}/${slot}/${port}.${onuId}:${row.GEMPORT_ID}`);
+                            configLines.push(`  service-port ${row.GEMPORT_ID} user-vlan ${row.User_Vlan} vlan ${row.User_Vlan}`);
+                            configLines.push(`  qos traffic-policy ${downProfile} direction ingress`);
+                            configLines.push(`  qos traffic-policy ${upProfile} direction egress`);
+                            configLines.push(`$\n`);
+                        });
+                    }
+
+                    globalZteConfigText = configLines.join('\n');
+                    document.getElementById('res_zte').textContent = globalZteConfigText;
+                    document.getElementById('btn-download-zte').classList.remove('hidden');
+                    alert("Konversi ke ZTE Berhasil!");
+
+                } catch(err) {
+                    alert("Gagal membaca atau memproses file Excel: " + err.message);
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function downloadZteTxt() {
+            if(!globalZteConfigText) return;
+            const blob = new Blob([globalZteConfigText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'ZTE_ONU_Provisioning_Config.txt';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+        // --- GLOBAL COPY TO CLIPBOARD ---
+        function copyCol(id) {
+            const text = document.getElementById(id).textContent;
+            if(!text) return;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+
+                btn.classList.add('success');
+                btn.textContent = 'COPIED ✓';
+
+                setTimeout(() => {
+                    btn.classList.remove('remove');
+                    btn.className = btn.className.replace('success', '').trim();
+                    btn.textContent = originalText;
+                }, 1000);
+            });
+        }
     </script>
 </body>
 </html>
