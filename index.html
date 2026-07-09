@@ -265,7 +265,8 @@
                         <p class="font-bold text-emerald-800 mb-2">Petunjuk :</p>
                         <ul class="list-disc ml-5 space-y-1">
                             <li>Upload file Excel hasil query NMS Huawei (<span class="font-bold">ONU_SERVICE_VLAN_QUERY</span>).</li>
-                            <li>Pastikan nama kolom sesuai: <span class="mono-font font-bold">Frame ID, Slot ID, Port ID, ONU ID, User Label, SN/MAC, Terminal Type, GEMPORT ID, User Vlan, Upstream Traffic Info, Downstream Traffic Info, ONU Alias</span>.</li>
+                            <li>Karena PON Huawei dimulai dari 0, sedangkan ZTE dari 1, maka : <span class="mono-font font-bold"> PON 0/1/0 menjadi 1/1/1, 0/2/0 akan menjadi 1/2/1, dan seterusnya </span>.</li>
+                            <li>Karena ONU ID Huawei dimulai dari 0, sedangkan ZTE dari 1, maka : <span class="mono-font font-bold"> ONU 0/1/0:0 menjadi 1/1/1:1, 0/2/0:0 akan menjadi 1/2/1:1, dan seterusnya </span>.</li>
                         </ul>
                     </div>
                 </div>
